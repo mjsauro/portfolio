@@ -174,7 +174,6 @@ Ceridian Dayforce, Neogov, …) is fine — those integrations are public. Namin
 Accurate's *customers*, or describing internal architecture in specifics
 (schemas, service names, infrastructure), is not.
 
-Still outstanding: the LinkedIn URL (the footer link is commented out until there
-is one — a link to linkedin.com's homepage reads as unfinished) and a résumé PDF.
-The About page's résumé download button was removed rather than left pointing at
-a 404; restore it once `web/public/resume.pdf` exists.
+Still outstanding: a résumé PDF. The About page's download button was removed
+rather than left pointing at a 404; restore it once `web/public/resume.pdf`
+exists.
