@@ -7,7 +7,7 @@ variable "project_name" {
 variable "aws_region" {
   description = "Region for S3, Lambda, API Gateway, and SES. CloudFront is global."
   type        = string
-  default     = "us-east-1"
+  default     = "us-east-2"
 }
 
 variable "contact_to_address" {

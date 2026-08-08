@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://REPLACE-WITH-API-ID.execute-api.us-east-1.amazonaws.com",
+    "target": "https://s947f8ehy4.execute-api.us-east-2.amazonaws.com",
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"

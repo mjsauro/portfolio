@@ -178,8 +178,17 @@ resource "aws_cloudfront_distribution" "site" {
   }
 
   viewer_certificate {
-    # Serves *.cloudfront.net over HTTPS at no cost. Swap for an ACM cert in
-    # us-east-1 plus `aliases` when a custom domain is added.
+    /*
+     * Serves *.cloudfront.net over HTTPS at no cost. To add a custom domain,
+     * set `aliases` and swap this for `acm_certificate_arn`.
+     *
+     * The certificate MUST live in us-east-1 — CloudFront reads certs from
+     * that region only, regardless of var.aws_region (us-east-2 here). That
+     * means a second aliased provider:
+     *
+     *   provider "aws" { alias = "us_east_1", region = "us-east-1" }
+     *   resource "aws_acm_certificate" "site" { provider = aws.us_east_1, ... }
+     */
     cloudfront_default_certificate = true
   }
 }

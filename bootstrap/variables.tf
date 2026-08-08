@@ -7,7 +7,7 @@ variable "project_name" {
 variable "aws_region" {
   description = "Region for the state bucket and IAM resources."
   type        = string
-  default     = "us-east-1"
+  default     = "us-east-2"
 }
 
 variable "github_repository" {

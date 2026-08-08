@@ -94,7 +94,7 @@ to verified addresses. That's fine here, since the only recipient is you.
 | Type     | Name                       | Value                                 |
 | -------- | -------------------------- | ------------------------------------- |
 | Variable | `AWS_ROLE_ARN`             | from the bootstrap output             |
-| Variable | `AWS_REGION`               | `us-east-1`                           |
+| Variable | `AWS_REGION`               | `us-east-2`                           |
 | Variable | `TF_STATE_BUCKET`          | from the bootstrap output             |
 | Secret   | `CONTACT_TO_ADDRESS`       | where messages land                   |
 | Secret   | `CONTACT_FROM_ADDRESS`     | verified SES sender                   |
