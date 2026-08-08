@@ -1,0 +1,13 @@
+# Copy to terraform.tfvars (gitignored) and fill in.
+
+project_name = "mjsauro-portfolio"
+aws_region   = "us-east-1"
+
+# Where contact form submissions land. In SES sandbox mode this address must be
+# verified before anything can actually be delivered.
+contact_to_address = "mjsauro@gmail.com"
+
+# Envelope sender. Using the same address as the recipient is the simplest
+# sandbox setup — one identity to verify. Switch to something like
+# noreply@yourdomain.com once you own a domain and verify it in SES.
+contact_from_address = "mjsauro@gmail.com"

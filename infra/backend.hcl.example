@@ -1,0 +1,12 @@
+# Do not edit by hand. Generate the real file from the bootstrap output:
+#
+#   terraform -chdir=../bootstrap output -raw backend_hcl > backend.hcl
+#   terraform init -backend-config=backend.hcl
+#
+# It looks like this, with the account ID filled in:
+
+bucket       = "mjsauro-portfolio-tfstate-123456789012"
+key          = "infra/terraform.tfstate"
+region       = "us-east-1"
+encrypt      = true
+use_lockfile = true

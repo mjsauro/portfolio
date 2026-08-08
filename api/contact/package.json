@@ -1,0 +1,8 @@
+{
+  "name": "contact-handler",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Lambda behind /api/contact. Validates the form and sends via SES.",
+  "main": "index.mjs"
+}
