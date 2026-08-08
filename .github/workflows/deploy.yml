@@ -25,22 +25,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
+          # See ci.yml — these two lines are load-bearing under setup-node v5+.
           cache: npm
           cache-dependency-path: web/package-lock.json
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           # Must be >= the version used locally: Terraform refuses to read state
           # written by a newer version, so a lower pin here breaks deploys.
           terraform_version: 1.15.8
 
       - name: Assume deploy role
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}

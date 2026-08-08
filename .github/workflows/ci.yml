@@ -19,11 +19,15 @@ jobs:
         working-directory: web
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 20
+          # Both cache lines are required, not decorative. setup-node >= v5
+          # turns caching on by itself when package.json has a packageManager
+          # field (ours does) and then looks for a lockfile at the repository
+          # root — where there isn't one, because the app lives in web/.
           cache: npm
           cache-dependency-path: web/package-lock.json
 
@@ -59,9 +63,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           # Must be >= the version used locally: Terraform refuses to read state
           # written by a newer version, so a lower pin here breaks deploys.
