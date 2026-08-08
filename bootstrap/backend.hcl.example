@@ -1,0 +1,16 @@
+# Do not edit by hand. Generate the real file from this module's own output:
+#
+#   terraform output -raw backend_hcl_bootstrap > backend.hcl
+#   terraform init -migrate-state -backend-config=backend.hcl
+#
+# On the very first run in a fresh account this file will not exist yet and
+# cannot: the bucket it names is created by this module. Apply once with local
+# state, then generate it and migrate. See the header comment in main.tf.
+#
+# It looks like this, with the account ID filled in:
+
+bucket       = "mjsauro-portfolio-tfstate-123456789012"
+key          = "bootstrap/terraform.tfstate"
+region       = "us-east-2"
+encrypt      = true
+use_lockfile = true

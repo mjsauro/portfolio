@@ -2,13 +2,24 @@
  * Bootstrap: the chicken-and-egg layer.
  *
  * Terraform needs an S3 bucket to store remote state, but that bucket has to be
- * created by something. This module runs with LOCAL state (see the absence of a
- * backend block) and creates:
+ * created by something. This module creates:
  *   - the versioned state bucket used by ../infra
  *   - the GitHub OIDC provider and the role Actions assumes to deploy
  *
- * Run this once, by hand, then never again. Its own terraform.tfstate is
- * gitignored; if you lose it, import the resources rather than re-applying.
+ * It then stores its OWN state in the bucket it just created, under a separate
+ * key (bootstrap/terraform.tfstate) alongside infra's. That resolves the
+ * chicken-and-egg in two steps rather than leaving state on one laptop:
+ *
+ *   1. first run ever, with no backend.hcl present -> local state
+ *   2. write backend.hcl, then: terraform init -migrate-state -backend-config=backend.hcl
+ *
+ * After step 2 the local terraform.tfstate is a stale leftover and can be
+ * deleted; the bucket is versioned, so state history survives a bad apply.
+ *
+ * Note the bucket carries prevent_destroy, which is now doing double duty: it
+ * also stops `terraform destroy` from deleting the bucket this module's own
+ * state lives in. Never destroy this stack. If state is ever lost entirely,
+ * import the resources rather than re-applying over the top of them.
  */
 
 terraform {
@@ -22,6 +33,17 @@ terraform {
       version = "~> 6.0"
     }
   }
+
+  /*
+   * Partial backend config, same pattern as ../infra: the bucket name is not
+   * known until this module has run once, so it is supplied at init time.
+   *
+   *   terraform init -backend-config=backend.hcl
+   *
+   * Generate backend.hcl from this module's own output:
+   *   terraform output -raw backend_hcl_bootstrap > backend.hcl
+   */
+  backend "s3" {}
 }
 
 provider "aws" {
