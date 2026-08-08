@@ -40,6 +40,25 @@ data "aws_caller_identity" "current" {}
 locals {
   # Account ID suffix keeps the bucket name globally unique without a random resource.
   state_bucket_name = "${var.project_name}-tfstate-${data.aws_caller_identity.current.account_id}"
+
+  github_owner = split("/", var.github_repository)[0]
+  github_repo  = split("/", var.github_repository)[1]
+
+  # Both accepted subject forms. GitHub currently sends the immutable one
+  # (numeric IDs); the plain name form is kept so the role survives if that
+  # behavior is reverted or varies by event type.
+  #
+  # Each entry is an exact prefix whose only wildcard is the trailing segment,
+  # covering the ref or environment. Never wildcard the owner or repo segments:
+  # a pattern like "repo:mjsauro<star>/portfolio<star>:<star>" would also match
+  # a repo named mjsauro-attacker/portfolio-evil.
+  #
+  # (Written with <star> rather than the literal glob because the sequence that
+  # combines it with a slash would terminate a block comment.)
+  github_subjects = [
+    "repo:${var.github_repository}:*",
+    "repo:${local.github_owner}@${var.github_owner_id}/${local.github_repo}@${var.github_repo_id}:*",
+  ]
 }
 
 # ---------------------------------------------------------------------------
@@ -114,11 +133,11 @@ data "aws_iam_policy_document" "github_assume_role" {
     }
 
     # Scopes the role to this repo only. Without this condition ANY GitHub repo
-    # in the world could assume the role.
+    # in the world could assume the role. Multiple values are OR-ed.
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repository}:*"]
+      values   = local.github_subjects
     }
   }
 }
