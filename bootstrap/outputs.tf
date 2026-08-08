@@ -18,3 +18,14 @@ output "backend_hcl" {
     use_lockfile = true
   EOT
 }
+
+output "backend_hcl_bootstrap" {
+  description = "This module's own backend. Write to bootstrap/backend.hcl, then: terraform init -migrate-state -backend-config=backend.hcl"
+  value       = <<-EOT
+    bucket       = "${aws_s3_bucket.state.id}"
+    key          = "bootstrap/terraform.tfstate"
+    region       = "${var.aws_region}"
+    encrypt      = true
+    use_lockfile = true
+  EOT
+}

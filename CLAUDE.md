@@ -11,7 +11,7 @@ AWS infrastructure is Terraform-managed and deployed by GitHub Actions via OIDC.
 ```
 web/        Angular 21 app (Tailwind, zoneless, prerendered)
 api/contact Lambda handler for the contact form
-bootstrap/  Terraform, LOCAL state — creates the state bucket + GitHub OIDC role
+bootstrap/  Terraform, S3 state — creates the state bucket + GitHub OIDC role
 infra/      Terraform, S3 state — the actual stack
 ```
 
@@ -55,12 +55,11 @@ lower pin in CI breaks deploys the first time someone applies from a laptop.
 
 ## Terraform must run in two stages
 
-`bootstrap/` has no backend block and keeps state in a local `terraform.tfstate`.
-It exists only to create the S3 bucket that `infra/` stores its state in, plus
-the GitHub OIDC provider and deploy role. Run it once, by hand:
+`bootstrap/` exists only to create the S3 bucket that `infra/` stores its state
+in, plus the GitHub OIDC provider and deploy role. Run it once, by hand:
 
 ```bash
-terraform -chdir=bootstrap init
+terraform -chdir=bootstrap init -backend-config=backend.hcl
 terraform -chdir=bootstrap apply \
   -var="github_repository=mjsauro/portfolio" \
   -var="github_owner_id=20001014" \
@@ -68,13 +67,31 @@ terraform -chdir=bootstrap apply \
 terraform -chdir=bootstrap output -raw backend_hcl > infra/backend.hcl
 ```
 
-Then `infra/` initializes against that bucket. `infra/` uses a **partial backend**
-(`backend "s3" {}`) — `terraform init` without `-backend-config` will prompt or
-fail. State locking uses S3 native lockfiles (`use_lockfile`), not DynamoDB, which
-requires Terraform >= 1.11.
+**Both stacks now keep state in the same bucket**, under separate keys —
+`bootstrap/terraform.tfstate` and `infra/terraform.tfstate`. Bootstrap storing
+state in a bucket it manages is deliberate: the alternative was leaving it in a
+gitignored file on one laptop, where losing the machine means losing the handle
+on the OIDC provider and deploy role. The bucket is versioned, so state history
+survives a bad apply.
+
+Both use a **partial backend** (`backend "s3" {}`) — `terraform init` without
+`-backend-config` will prompt or fail. State locking uses S3 native lockfiles
+(`use_lockfile`), not DynamoDB, which requires Terraform >= 1.11.
+
+The chicken-and-egg only bites on a **fresh account**, where the bucket does not
+exist yet. There, run bootstrap once with no `backend.hcl` present (local state),
+then migrate:
+
+```bash
+terraform -chdir=bootstrap output -raw backend_hcl_bootstrap > bootstrap/backend.hcl
+terraform -chdir=bootstrap init -migrate-state -backend-config=backend.hcl
+```
+
+After migrating, the local `bootstrap/terraform.tfstate` is a stale leftover.
 
 Never `terraform destroy` the bootstrap stack: the state bucket carries
-`prevent_destroy` because it is the one thing that cannot be rebuilt from source.
+`prevent_destroy` because it is the one thing that cannot be rebuilt from source,
+and it now also holds bootstrap's own state.
 
 ## Architecture notes that are easy to get wrong
 
