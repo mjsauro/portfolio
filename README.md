@@ -67,9 +67,17 @@ brew install awscli
 **1. Bootstrap** — creates the Terraform state bucket and the role GitHub
 Actions assumes. Run once, locally.
 
+The numeric IDs are required: GitHub's OIDC subject claim embeds them, so a
+name-only trust policy never matches.
+
 ```bash
+gh api repos/<owner>/<repo> --jq '{repo_id:.id, owner_id:.owner.id}'
+
 terraform -chdir=bootstrap init
-terraform -chdir=bootstrap apply -var="github_repository=<owner>/<repo>"
+terraform -chdir=bootstrap apply \
+  -var="github_repository=<owner>/<repo>" \
+  -var="github_owner_id=<owner_id>" \
+  -var="github_repo_id=<repo_id>"
 terraform -chdir=bootstrap output -raw backend_hcl > infra/backend.hcl
 terraform -chdir=bootstrap output github_actions_role_arn
 ```

@@ -61,7 +61,10 @@ the GitHub OIDC provider and deploy role. Run it once, by hand:
 
 ```bash
 terraform -chdir=bootstrap init
-terraform -chdir=bootstrap apply -var="github_repository=mjsauro/portfolio"
+terraform -chdir=bootstrap apply \
+  -var="github_repository=mjsauro/portfolio" \
+  -var="github_owner_id=20001014" \
+  -var="github_repo_id=1328052060"
 terraform -chdir=bootstrap output -raw backend_hcl > infra/backend.hcl
 ```
 
@@ -104,6 +107,30 @@ unchanged.
 **404s arrive as 403.** With OAC, a missing S3 key returns 403, not 404. Both
 codes are mapped to `/not-found/index.html` with a 404 response code in
 `cloudfront.tf`.
+
+**GitHub's OIDC subject is not what the docs suggest.** The `sub` claim GitHub
+actually sends embeds numeric owner and repo IDs:
+
+```
+repo:mjsauro@20001014/portfolio@1328052060:ref:refs/heads/main
+```
+
+A trust policy matching only `repo:<owner>/<repo>:*` fails every time with
+`Not authorized to perform sts:AssumeRoleWithWebIdentity`, and neither the
+Actions log nor the IAM console hints at why — the role, provider, and audience
+all look correct. CloudTrail is the only place the real subject appears:
+
+```bash
+aws cloudtrail lookup-events \
+  --lookup-attributes AttributeKey=EventName,AttributeValue=AssumeRoleWithWebIdentity \
+  --max-results 5 --query 'Events[].CloudTrailEvent' --output text
+```
+
+`bootstrap/` accepts both forms via `local.github_subjects`. If the repo is ever
+renamed or transferred, refresh the IDs
+(`gh api repos/<owner>/<repo> --jq '{repo_id:.id, owner_id:.owner.id}'`) and
+re-apply. Never widen these into wildcards over the owner or repo segments — that
+would let an attacker-created repo with a similar name assume the role.
 
 **SES starts in sandbox.** `terraform apply` creates the email identities but
 cannot verify them — AWS emails a confirmation link that must be clicked, or
