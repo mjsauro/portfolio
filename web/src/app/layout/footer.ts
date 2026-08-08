@@ -15,12 +15,12 @@ import { RouterLink } from '@angular/router';
           <li>
             <a href="https://github.com/mjsauro" class="hover:text-ink transition-colors">GitHub</a>
           </li>
-          <li>
-            <!-- PLACEHOLDER: point at your real LinkedIn profile. -->
-            <a href="https://www.linkedin.com/" class="hover:text-ink transition-colors"
-              >LinkedIn</a
-            >
-          </li>
+          <!--
+            LinkedIn intentionally omitted until there is a real profile URL.
+            A link pointing at linkedin.com's homepage reads as unfinished, which
+            is worse than not listing it. Restore this once the URL is known:
+            <li><a href="https://www.linkedin.com/in/USERNAME">LinkedIn</a></li>
+          -->
           <li>
             <a routerLink="/about" fragment="contact" class="hover:text-ink transition-colors">
               Contact

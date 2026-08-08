@@ -24,8 +24,8 @@ import { SITE_NAME } from '../../core/seo';
           class="border-line text-muted mt-8 flex flex-wrap gap-x-8 gap-y-3 border-y py-4 text-sm"
         >
           <div>
-            <dt class="sr-only">Year</dt>
-            <dd class="font-mono">{{ p.year }}</dd>
+            <dt class="sr-only">Period</dt>
+            <dd class="font-mono">{{ p.period ?? p.year }}</dd>
           </div>
           <div class="flex-1">
             <dt class="sr-only">Stack</dt>

@@ -21,7 +21,7 @@ export class SeoTitleStrategy extends TitleStrategy {
 
     const description =
       this.deepestData(state, 'description') ??
-      'Software engineer building reliable web and cloud systems.';
+      'Senior software engineer building the APIs behind background screening.';
 
     this.meta.updateTag({ name: 'description', content: description });
     this.meta.updateTag({ property: 'og:title', content: full });

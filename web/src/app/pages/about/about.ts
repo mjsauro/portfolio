@@ -17,24 +17,29 @@ interface Role {
       <h1 class="text-ink text-3xl font-bold tracking-tight sm:text-4xl">About</h1>
 
       <div class="text-muted mt-6 space-y-4 leading-relaxed">
-        <!-- PLACEHOLDER: replace with your real bio. Two or three short paragraphs. -->
         <p>
-          I'm a software engineer focused on building systems that stay understandable as they grow.
-          Most of my work sits where application code meets infrastructure.
+          I write software for background screening — the systems that carry a check from the moment
+          an employer orders it to the moment a result comes back. Most of that work has been APIs:
+          the integrations connecting applicant tracking systems to a screening platform, where the
+          data is regulated, personal, and expected to be correct.
         </p>
         <p>
-          Replace this paragraph with how you got here, what you care about technically, and what
-          kind of team you want to join next.
+          I did not start here. I studied criminal justice, planned on law school, earned a
+          paralegal certificate, and spent seven years in title insurance, eventually working as an
+          underwriter. Underwriting is risk assessment under regulatory constraint — reading a file
+          closely enough to know what could go wrong, and being accountable for the call. In 2016 I
+          enrolled at Coding Temple in Chicago and changed careers. I landed, more or less by
+          accident, in the one corner of software where the previous decade was domain knowledge
+          rather than a detour.
+        </p>
+        <p>
+          Six years of that has been C# and ASP.NET Core; the last few have been Java and Spring
+          Boot after moving to a different part of the company, which was a genuine adjustment and a
+          useful one. Along the way I have picked Angular back up after years away from the front
+          end, and started closing my longest-standing gap: for most of my career a DevOps team
+          owned deployment, so this site runs on AWS infrastructure I wrote and deploy myself.
         </p>
       </div>
-
-      <!-- PLACEHOLDER: drop resume.pdf into web/public/ for this link to resolve. -->
-      <a
-        href="/resume.pdf"
-        class="border-line text-ink hover:border-accent mt-8 inline-block rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors"
-      >
-        Download résumé (PDF)
-      </a>
     </section>
 
     <section class="mx-auto max-w-3xl px-6 py-8" aria-labelledby="skills-heading">
@@ -56,7 +61,7 @@ interface Role {
         Experience
       </h2>
       <ol class="mt-6 space-y-8">
-        @for (role of roles; track role.company) {
+        @for (role of roles; track role.company + role.title) {
           <li class="border-line border-l-2 pl-5">
             <p class="text-muted font-mono text-xs">{{ role.period }}</p>
             <h3 class="text-ink mt-1 font-semibold">{{ role.title }} · {{ role.company }}</h3>
@@ -80,28 +85,35 @@ interface Role {
   `,
 })
 export class About {
-  // PLACEHOLDER: replace with your actual skills.
   protected readonly skills = [
-    { label: 'Languages', items: ['TypeScript', 'Python', 'C#', 'SQL'] },
+    { label: 'Languages', items: ['C#', 'Java', 'TypeScript', 'SQL'] },
+    { label: 'Backend', items: ['ASP.NET Core', 'Spring Boot', 'REST', 'SOAP/XML', 'Queues'] },
     { label: 'Frontend', items: ['Angular', 'React', 'Tailwind CSS'] },
-    { label: 'Cloud', items: ['AWS', 'Terraform', 'Docker', 'GitHub Actions'] },
-    { label: 'Data', items: ['PostgreSQL', 'DynamoDB', 'Redis'] },
+    { label: 'Data', items: ['SQL Server'] },
+    { label: 'Cloud', items: ['AWS', 'Bedrock', 'Terraform', 'GitHub Actions'] },
   ];
 
-  // PLACEHOLDER: replace with your actual roles, most recent first.
   protected readonly roles: Role[] = [
     {
-      company: 'Company Name',
+      company: 'Accurate Background',
       title: 'Senior Software Engineer',
-      period: '2023 — Present',
+      period: '2018 — Present',
       summary:
-        'PLACEHOLDER — what you own, the scale you work at, and one concrete thing you shipped.',
+        'Joined through the acquisition of CareerBuilder Employment Screening. Built and maintained the ATS integrations carrying background check requests and results, then moved to the innovation team for a series of proofs of concept in Java and Spring Boot, and now to post-hire monitoring — building its API and, more recently, its Angular interface.',
     },
     {
-      company: 'Previous Company',
+      company: 'CareerBuilder Employment Screening',
       title: 'Software Engineer',
-      period: '2020 — 2023',
-      summary: 'PLACEHOLDER — what you built and what changed because of it.',
+      period: '2016 — 2018',
+      summary:
+        'First role after changing careers. Built ASP.NET Core APIs and internal tooling for background screening integrations, working across REST, SOAP, and legacy file-based partner interfaces.',
+    },
+    {
+      company: 'Title insurance',
+      title: 'Title Underwriter',
+      period: '2009 — 2016',
+      summary:
+        'Worked up to the underwriter level, assessing risk on real estate transactions under regulatory constraint. The habits it built — reading a file closely, knowing what could go wrong, owning the call — transferred more directly to regulated software than I expected.',
     },
   ];
 }

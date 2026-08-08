@@ -156,10 +156,25 @@ defined in `web/src/styles.css` via `@theme` and remapped under
 `prefers-color-scheme: dark`. Use those tokens rather than raw palette classes or
 `dark:` variants, so light and dark stay in sync automatically.
 
-## Placeholder content
+## Content
 
-Real copy has not been written yet. Everything marked `PLACEHOLDER` is meant to
-be replaced: project case studies in `core/projects.ts`, bio/skills/roles in
-`pages/about/about.ts`, the hero in `pages/home/home.ts`, and the LinkedIn URL in
-`layout/footer.ts`. `web/public/resume.pdf` is referenced by the About page but
-does not exist yet.
+The copy is real, not placeholder. It describes Matt's actual work at Accurate
+Background (formerly CareerBuilder Employment Screening) and his career change
+from title insurance underwriting.
+
+Two rules when editing it:
+
+**No invented metrics.** He does not have access to throughput, latency, or scale
+figures for this work, so the case studies are deliberately qualitative and
+specific rather than numeric. Do not add plausible-sounding numbers. If real
+figures surface later, they can be slotted in.
+
+**Respect the confidentiality line.** Naming ATS *partners* (iCIMS, Workday,
+Ceridian Dayforce, Neogov, …) is fine — those integrations are public. Naming
+Accurate's *customers*, or describing internal architecture in specifics
+(schemas, service names, infrastructure), is not.
+
+Still outstanding: the LinkedIn URL (the footer link is commented out until there
+is one — a link to linkedin.com's homepage reads as unfinished) and a résumé PDF.
+The About page's résumé download button was removed rather than left pointing at
+a 404; restore it once `web/public/resume.pdf` exists.

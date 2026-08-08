@@ -17,7 +17,9 @@ import { Project } from '../core/projects';
             {{ project().title }}
           </a>
         </h3>
-        <span class="text-muted shrink-0 font-mono text-xs">{{ project().year }}</span>
+        <span class="text-muted shrink-0 font-mono text-xs">
+          {{ project().period ?? project().year }}
+        </span>
       </div>
 
       <p class="text-muted mt-2 text-sm leading-relaxed">{{ project().tagline }}</p>

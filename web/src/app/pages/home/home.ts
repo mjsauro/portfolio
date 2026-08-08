@@ -9,18 +9,17 @@ import { ProjectCard } from '../../shared/project-card';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="mx-auto max-w-5xl px-6 pt-20 pb-16">
-      <p class="text-accent font-mono text-sm">Software Engineer</p>
+      <p class="text-accent font-mono text-sm">Senior Software Engineer</p>
 
       <h1 class="text-ink mt-4 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">
-        <!-- PLACEHOLDER: one sentence on what you build and who it is for. -->
-        I build reliable web and cloud systems.
+        I build the APIs that background screening runs on.
       </h1>
 
       <p class="text-muted mt-6 max-w-2xl text-lg leading-relaxed">
-        <!-- PLACEHOLDER: two or three sentences. What you specialize in, the kind of
-             problems you like, and what you are looking for right now. -->
-        I work across the stack, with a bias toward the parts that keep systems running: clear data
-        models, boring deployments, and tests that fail for the right reasons.
+        Nearly a decade connecting employers' hiring systems to a regulated screening platform — a
+        dozen applicant tracking systems that agree on almost nothing, turned into one dependable
+        flow of requests in and results out. Lately: Java and Spring Boot, Angular on the front end,
+        and AWS infrastructure I provision myself.
       </p>
 
       <div class="mt-10 flex flex-wrap gap-4">
