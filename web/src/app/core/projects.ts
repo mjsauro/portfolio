@@ -42,7 +42,7 @@ const PROJECTS: readonly Project[] = [
       "Continuous monitoring of driver's licenses, professional licensure, and sanctions after the hire.",
     year: 2026,
     period: '2026 — Present',
-    stack: ['Java', 'Spring Boot', 'Angular', 'TypeScript', 'REST'],
+    stack: ['Java', 'Spring Boot', 'Angular', 'TypeScript', 'REST', 'MongoDB'],
     problem:
       "A background check is a snapshot taken on the day someone is hired, but risk does not hold still. A commercial driver's license gets suspended, a nursing license lapses, a name appears on a sanctions list. Employers who need to know about those changes were left choosing between re-running checks on a schedule — expensive, and still blind between runs — or not knowing at all.",
     approach:
@@ -57,7 +57,7 @@ const PROJECTS: readonly Project[] = [
     tagline: "An LLM surfacing gaps between a candidate's résumé and what they entered themselves.",
     year: 2025,
     period: '2025',
-    stack: ['Java', 'Spring Boot', 'AWS Bedrock', 'JSON'],
+    stack: ['Java', 'Spring Boot', 'AWS Bedrock', 'MongoDB', 'JSON'],
     problem:
       'Candidates enter their employment and education history into the platform, and separately upload a résumé. When those two accounts disagree, it is worth a second look — but nothing compared them, and comparing them by hand does not scale to the volume a screening company handles.',
     approach:
@@ -88,11 +88,11 @@ const PROJECTS: readonly Project[] = [
     tagline: 'A feasibility study that ended in a recommendation not to build it.',
     year: 2025,
     period: '2025',
-    stack: ['Java', 'Spring Boot', 'Research'],
+    stack: ['Java', 'Spring Boot', 'GraphQL', 'Research'],
     problem:
       'The premise was appealing: could background checks come back in seconds rather than the usual turnaround? Instant results are an obvious differentiator in screening, and the innovation team was asked whether a faster path through the existing flow was achievable.',
     approach:
-      'Rather than start building the fast path, we started by measuring where the time actually went — which jurisdictions and which stages accounted for the delay, and which of those a short circuit could realistically remove.',
+      'Rather than start building the fast path, we started by measuring where the time actually went — which jurisdictions and which stages accounted for the delay, and which of those a short circuit could realistically remove. Alongside the measurement we put up a rough proof of concept: a GraphQL layer that resolved a query by reaching out to whichever internal subsystems it actually needed, so the shape of the request drove the work rather than a call sequence fixed before we knew what a fast path would have to touch.',
     outcome:
       'The premise did not survive the data. Most checks already returned quickly, and the time that remained sat in places a faster pipeline could not eliminate. Building it would have added a parallel path to maintain in exchange for very little a customer would notice, so we recommended against it. I include this deliberately: choosing not to build something, and being able to show why, is as much of the job as shipping.',
     featured: false,

@@ -3,8 +3,11 @@ import { ContactForm } from '../../shared/contact-form';
 
 interface Role {
   company: string;
-  title: string;
+  /** Title progression, most recent first. Mirrors the block in resume/resume.html. */
+  titles: string[];
+  /** Span at the employer, not at the current title. */
   period: string;
+  note?: string;
   summary: string;
 }
 
@@ -25,12 +28,13 @@ interface Role {
         </p>
         <p>
           I did not start here. I studied criminal justice, planned on law school, earned a
-          paralegal certificate, and spent seven years at Chicago Title, working up from coordinator
-          to national underwriter. Underwriting is risk assessment under regulatory constraint —
-          reading a file closely enough to know what could go wrong, and being accountable for the
-          call. In the fall of 2017 I left to attend Coding Temple in Chicago, and started writing
-          software professionally that February. I landed, more or less by accident, in the one
-          corner of software where the previous decade was domain knowledge rather than a detour.
+          paralegal certificate, and spent seven years at Chicago Title Insurance Company, working
+          up from coordinator to national underwriter. Underwriting is risk assessment under
+          regulatory constraint — reading a file closely enough to know what could go wrong, and
+          being accountable for the call. In the fall of 2017 I left to attend Coding Temple in
+          Chicago, and started writing software professionally that February. I landed, more or less
+          by accident, in the one corner of software where the previous decade was domain knowledge
+          rather than a detour.
         </p>
         <p>
           Seven of the years since have been .NET — a VB.NET monolith at first, then C# and ASP.NET
@@ -75,10 +79,14 @@ interface Role {
         Experience
       </h2>
       <ol class="mt-6 space-y-8">
-        @for (role of roles; track role.company + role.title) {
+        @for (role of roles; track role.company) {
           <li class="border-line border-l-2 pl-5">
             <p class="text-muted font-mono text-xs">{{ role.period }}</p>
-            <h3 class="text-ink mt-1 font-semibold">{{ role.title }} · {{ role.company }}</h3>
+            <h3 class="text-ink mt-1 font-semibold">{{ role.company }}</h3>
+            <p class="text-muted mt-1 text-sm">{{ role.titles.join(' · ') }}</p>
+            @if (role.note) {
+              <p class="text-muted mt-1 text-xs italic">{{ role.note }}</p>
+            }
             <p class="text-muted mt-2 text-sm leading-relaxed">{{ role.summary }}</p>
           </li>
         }
@@ -103,8 +111,9 @@ export class About {
     { label: 'Languages', items: ['C#', 'Java', 'TypeScript', 'SQL'] },
     {
       label: 'Backend',
-      items: ['ASP.NET Core', 'Spring Boot', 'REST', 'SOAP/XML', 'Queues', 'SQL Server'],
+      items: ['ASP.NET Core', 'Spring Boot', 'Microservices', 'REST', 'GraphQL', 'SOAP/XML'],
     },
+    { label: 'Data', items: ['SQL Server', 'MongoDB', 'Entity Framework Core', 'Queues'] },
     { label: 'Frontend', items: ['Angular', 'React', 'Tailwind CSS'] },
     { label: 'Cloud', items: ['AWS', 'Bedrock', 'Terraform', 'GitHub Actions'] },
   ];
@@ -112,21 +121,19 @@ export class About {
   protected readonly roles: Role[] = [
     {
       company: 'Accurate Background',
-      title: 'Senior Software Engineer',
-      period: '2020 — Present',
+      titles: ['Senior Software Engineer, 2023 — Present', 'Software Engineer, 2018 — 2023'],
+      period: '2018 — Present',
+      note: 'Joined CareerBuilder Employment Screening; acquired by Accurate Background in 2020.',
       summary:
-        'Joined through the acquisition of CareerBuilder Employment Screening. Kept ownership of the ATS integrations carrying background check requests and results through 2025, then moved to the innovation team for a series of proofs of concept in Java and Spring Boot, and now to post-hire monitoring — building its API and, more recently, its Angular interface.',
-    },
-    {
-      company: 'CareerBuilder Employment Screening',
-      title: 'Software Engineer',
-      period: '2018 — 2020',
-      summary:
-        'First role after changing careers, working in the VB.NET monolith that carried ordering, vendor, and internal operations for the whole platform. Moved to the applicant tracking system integrations team at the end of 2019 and started building the APIs that carry screening requests and results.',
+        'First role after changing careers, working in the VB.NET monolith that carried ordering, vendor, and internal operations for the whole platform. Moved to the applicant tracking system integrations team at the end of 2019 and owned the APIs carrying screening requests and results through 2025. Then to the innovation team for a series of proofs of concept in Java and Spring Boot, and now to post-hire monitoring — building its API and, more recently, its Angular interface.',
     },
     {
       company: 'Chicago Title Insurance Company',
-      title: 'National Underwriter',
+      titles: [
+        'National Underwriter, 2014 — 2017',
+        'National Underwriting Associate, 2011 — 2014',
+        'National Business Coordinator, 2010 — 2011',
+      ],
       period: '2010 — 2017',
       summary:
         'Worked up from coordinator to national underwriter, assessing risk on commercial real estate transactions across all 50 states under regulatory constraint. The habits it built — reading a file closely, knowing what could go wrong, owning the call — transferred more directly to regulated software than I expected.',
