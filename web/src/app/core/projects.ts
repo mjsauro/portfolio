@@ -83,6 +83,23 @@ const PROJECTS: readonly Project[] = [
     featured: true,
   },
   {
+    slug: 'guitar-store-rebuild',
+    title: 'The Same Store, Nine Years Apart',
+    tagline: 'My bootcamp final project, rebuilt in 2026 and kept beside the original.',
+    year: 2026,
+    period: '2017 · 2026',
+    stack: ['C#', 'ASP.NET Core', 'DynamoDB', 'AWS Lambda', 'Cognito', 'GitHub Actions'],
+    problem:
+      'My final project at Coding Temple in 2017 was an online guitar store: ASP.NET MVC 5 on .NET Framework, Entity Framework against SQL Server LocalDB, ASP.NET Identity over OWIN, running on Windows and IIS and nowhere else. It is the oldest code I still have, written before I had shipped anything professionally. Rebuilding it is the closest thing I have to a controlled measurement — same requirements, same developer, nine years apart.',
+    approach:
+      'I rebuilt the same store — catalog, cart, checkout, back office — on ASP.NET Core and .NET 10, and kept both versions in one repository so they can be read side by side rather than described. The framework upgrade was the least of it. Moving from a relational schema to DynamoDB meant rethinking shapes instead of transliterating tables: an entity-attribute-value pair modeling things like pickup style and amp wattage collapsed into a single map on the product item, and a cart became one item collection under a shared partition key, so it comes back in a single query rather than a join. Orders embed their line items, which the old schema had already got right — a receipt is a point-in-time snapshot, and a later catalog edit must never rewrite one. Sign-in moved to the Cognito hosted UI over OIDC, payments behind an interface that never sees a full card number, and email to a single sender abstraction on SES.',
+    outcome:
+      'Live, deploying to Lambda on push through GitHub Actions over OIDC. The most useful part was reading the old code before replacing it. It had a SQL injection in the sales report, no authorization whatsoever on the admin controllers — anyone who knew the URL could edit products or read staff wages and dates of birth — missing CSRF tokens on the action that charged a card, and raw card numbers moving through its own models. I wrote all of that, and none of it is unusual for a bootcamp final project. Being able to find it now is the part worth showing, and each one is fixed by construction in the rebuild rather than patched over. The rebuild had its own instructive failure: this account blocks public Lambda function URLs, and fronting one with CloudFront and Origin Access Control serves GETs but breaks every form post, because a signed origin request and an unsigned browser POST cannot both be right. API Gateway invokes the function directly, and the Lambda stays private either way.',
+    repoUrl: 'https://github.com/mjsauro/GuitarStore',
+    liveUrl: 'https://guitarstore.mattsauro.com',
+    featured: true,
+  },
+  {
     slug: 'fast-path-not-built',
     title: "The Fast Path We Didn't Build",
     tagline: 'A feasibility study on near-instant screening results, and the case against them.',
