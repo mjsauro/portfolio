@@ -97,9 +97,10 @@ resource "cloudflare_dns_record" "apex" {
 }
 
 /*
- * www serves the same distribution rather than 301-ing to the apex. A true
- * redirect needs the viewer-request function to branch on the Host header;
- * worth doing if the duplicate hostname ever matters for search, not before.
+ * www points at the same distribution, which then 301s it to the apex — the
+ * viewer-request function branches on the Host header. DNS cannot do this on
+ * its own: a CNAME resolves a name, it does not redirect a request, so the
+ * hostname has to reach CloudFront before anything can answer with a 301.
  */
 resource "cloudflare_dns_record" "www" {
   count = local.domain_enabled ? 1 : 0
