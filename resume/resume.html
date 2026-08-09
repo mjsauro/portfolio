@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Matthew J. Sauro — Résumé</title>
+    <style>
+      /* Print-first: this document exists to become resume.pdf. Letter, 0.5in
+         margins, single page. Screen rendering is incidental. */
+      @page {
+        size: letter;
+        margin: 0.5in;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        font-size: 9.5pt;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #16181d;
+        line-height: 1.28;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      /* ---- header ---- */
+
+      .name {
+        margin: 0;
+        font-size: 20pt;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .role {
+        margin: 1pt 0 0;
+        font-size: 10.5pt;
+        font-weight: 600;
+        color: #3d5a99;
+      }
+
+      .contact {
+        margin: 4pt 0 0;
+        font-size: 8.5pt;
+        color: #4b5162;
+      }
+
+      .contact span::after {
+        content: ' · ';
+        color: #a8adba;
+      }
+
+      .contact span:last-child::after {
+        content: '';
+      }
+
+      .summary {
+        margin: 8pt 0 0;
+        font-size: 9pt;
+        line-height: 1.4;
+        color: #2b2f3a;
+      }
+
+      /* ---- sections ---- */
+
+      h2 {
+        margin: 9pt 0 0;
+        padding-bottom: 2pt;
+        border-bottom: 0.75pt solid #c8ccd6;
+        font-size: 8.5pt;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: #3d5a99;
+      }
+
+      /* ---- employer block ---- */
+
+      .employer {
+        margin-top: 7pt;
+      }
+
+      .employer-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12pt;
+      }
+
+      .employer-name {
+        font-size: 11pt;
+        font-weight: 700;
+      }
+
+      .employer-meta {
+        font-size: 8.5pt;
+        color: #4b5162;
+        white-space: nowrap;
+      }
+
+      .titles {
+        margin: 1pt 0 0;
+        font-size: 9pt;
+        color: #2b2f3a;
+      }
+
+      .note {
+        font-size: 8.5pt;
+        font-style: italic;
+        color: #6b7183;
+      }
+
+      /* ---- engagements within a role ---- */
+
+      .stint {
+        margin-top: 5pt;
+      }
+
+      .stint-head {
+        font-size: 9pt;
+        font-weight: 700;
+        color: #16181d;
+      }
+
+      .stint-head .years {
+        font-weight: 400;
+        color: #6b7183;
+      }
+
+      ul {
+        margin: 2pt 0 0;
+        padding-left: 12pt;
+      }
+
+      li {
+        margin-top: 2pt;
+        font-size: 9pt;
+      }
+
+      li::marker {
+        color: #a8adba;
+      }
+
+      /* ---- skills ---- */
+
+      .skills {
+        margin: 5pt 0 0;
+        display: grid;
+        grid-template-columns: 68pt 1fr;
+        gap: 2pt 8pt;
+        font-size: 9pt;
+      }
+
+      /* Keep atomic units off page boundaries. Applied only to small blocks —
+         putting it on a whole section would push the section wholesale. */
+      li,
+      .edu,
+      .stint {
+        break-inside: avoid;
+      }
+
+      .skills dt {
+        font-weight: 700;
+      }
+
+      .skills dd {
+        margin: 0;
+        color: #2b2f3a;
+      }
+
+      /* ---- education ---- */
+
+      .edu {
+        margin-top: 5pt;
+        display: flex;
+        justify-content: space-between;
+        gap: 12pt;
+        font-size: 9pt;
+      }
+
+      .edu-year {
+        color: #6b7183;
+        white-space: nowrap;
+      }
+
+      .todo {
+        background: #ffe8a3;
+        padding: 0 2pt;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="name">Matthew J. Sauro</h1>
+      <p class="role">Senior Software Engineer</p>
+      <p class="contact">
+        <span>mjsauro@gmail.com</span>
+        <span class="todo">CITY, ST</span>
+        <span>mattsauro.com</span>
+        <span>github.com/mjsauro</span>
+        <span>linkedin.com/in/matthew-sauro</span>
+      </p>
+
+      <p class="summary">
+        Eight years building and owning the APIs behind regulated background screening. Backend
+        depth across .NET and Java, extending into the Angular interfaces on top and the AWS
+        infrastructure underneath. Came to software from commercial title underwriting — also risk
+        assessment under regulatory constraint.
+      </p>
+    </header>
+
+    <section>
+      <h2>Experience</h2>
+
+      <div class="employer">
+        <div class="employer-head">
+          <span class="employer-name">Accurate Background</span>
+          <span class="employer-meta">Feb 2018 — Present · Remote</span>
+        </div>
+        <p class="titles">
+          Senior Software Engineer (2023 — Present) · Software Engineer (2018 — 2023)
+          <span class="note">— via the CareerBuilder Employment Screening acquisition, 2020</span>
+        </p>
+
+        <div class="stint">
+          <p class="stint-head">Post-Hire Monitoring <span class="years">· 2026 — Present</span></p>
+          <ul>
+            <li>
+              Built the API fronting continuous monitoring of driver's licenses, professional
+              licensure, and sanctions, designed as a deliberate service boundary rather than a thin
+              proxy so customers are not coupled to internal systems that predate them.
+            </li>
+            <li>
+              Building the monitoring platform and its Angular interface — returning to frontend
+              work after most of a decade on backend services.
+            </li>
+            <li>
+              Provisioning and deploying own infrastructure in Terraform as team ownership moved
+              toward self-service DevOps.
+            </li>
+          </ul>
+        </div>
+
+        <div class="stint">
+          <p class="stint-head">Innovation Team <span class="years">· 2025</span></p>
+          <ul>
+            <li>
+              Résumé discrepancy detection: a Spring Boot service using AWS Bedrock to extract
+              structured employment history from résumés, with rules separating real discrepancies
+              from formatting noise. Surfaced findings for human review rather than rendering
+              verdicts. Taken to production by the owning team.
+            </li>
+            <li>
+              Smart jurisdiction: measured where screening turnaround time actually went before
+              building a faster path, then recommended against building it when the data showed the
+              gain would not be worth the parallel path to maintain.
+            </li>
+          </ul>
+        </div>
+
+        <div class="stint">
+          <p class="stint-head">
+            Applicant Tracking System Integrations <span class="years">· 2019 — 2025</span>
+          </p>
+          <ul>
+            <li>
+              Co-designed and extended the inbound and outbound APIs carrying background check
+              requests and results between ATS partners and the screening platform, normalizing each
+              partner's contract at the edge into one internal representation.
+            </li>
+            <li>
+              Built new integrations for Ceridian Dayforce and Neogov; extended iCIMS, Workday,
+              SmartRecruiters, Oracle, and Greenhouse; maintained UKG, Jobvite, and Bullhorn across
+              REST, SOAP/XML, and SFTP file-based interfaces.
+            </li>
+            <li>
+              Acknowledged push-based partners immediately and queued work for asynchronous
+              processing so a slow downstream never surfaced as a partner-side timeout; built the
+              retry and recovery paths for partial failures.
+            </li>
+            <li>
+              Moved customer onboarding into platform configuration, making a new customer
+              integration a configuration change rather than a deployment, and carved services out
+              of a tightly coupled legacy .NET monolith where the coupling allowed.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="employer">
+        <div class="employer-head">
+          <span class="employer-name">Chicago Title Insurance Company</span>
+          <span class="employer-meta">Jun 2010 — Sep 2017 · Chicago, IL</span>
+        </div>
+        <p class="titles">
+          National Underwriter (2014 — 2017) · National Underwriting Associate (2011 — 2014) ·
+          National Business Coordinator (2010 — 2011)
+        </p>
+        <ul>
+          <li>
+            Negotiated and drafted title insurance policies for commercial real estate across all 50
+            states, managed large multi-state transactions, and mentored incoming underwriters.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
+      <dl class="skills">
+        <dt>Languages</dt>
+        <dd>C# · Java · TypeScript · SQL</dd>
+        <dt>Backend</dt>
+        <dd>ASP.NET Core · Spring Boot · REST · SOAP/XML · Message queues · SQL Server</dd>
+        <dt>Frontend</dt>
+        <dd>Angular · React · Tailwind CSS</dd>
+        <dt>Cloud &amp; Infra</dt>
+        <dd>AWS · Bedrock · Terraform · CloudFront · Lambda · GitHub Actions · CI/CD</dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Education</h2>
+      <div class="edu">
+        <span>Coding Temple — Full Stack .NET Development</span>
+        <span class="edu-year">2017</span>
+      </div>
+      <div class="edu">
+        <span><span class="todo">INSTITUTION</span> — Paralegal Certificate</span>
+        <span class="edu-year">2008</span>
+      </div>
+      <div class="edu">
+        <span>
+          Northeastern University — <span class="todo">B.S./B.A.</span>, Criminal Justice,
+          <em>cum laude</em>
+        </span>
+        <span class="edu-year">2007</span>
+      </div>
+    </section>
+  </body>
+</html>
