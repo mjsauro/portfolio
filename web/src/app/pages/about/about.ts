@@ -108,13 +108,13 @@ interface Role {
 })
 export class About {
   protected readonly skills = [
-    { label: 'Languages', items: ['C#', 'Java', 'TypeScript', 'SQL'] },
+    { label: 'Languages', items: ['Java', 'C#', 'TypeScript', 'SQL'] },
     {
       label: 'Backend',
       items: [
+        'Spring Boot',
         '.NET',
         'ASP.NET Core',
-        'Spring Boot',
         'Microservices',
         'REST',
         'GraphQL',
@@ -124,8 +124,17 @@ export class About {
     { label: 'Data', items: ['SQL Server', 'MongoDB', 'Entity Framework Core', 'Message queues'] },
     { label: 'Frontend', items: ['Angular', 'React', 'Tailwind CSS'] },
     {
+      label: 'AI',
+      items: [
+        'LLM application development',
+        'AWS Bedrock',
+        'Prompt engineering',
+        'Structured extraction',
+      ],
+    },
+    {
       label: 'Cloud',
-      items: ['AWS', 'Bedrock', 'Terraform', 'CloudFront', 'Lambda', 'GitHub Actions'],
+      items: ['AWS', 'Terraform', 'CloudFront', 'Lambda', 'GitHub Actions'],
     },
   ];
 
@@ -136,7 +145,7 @@ export class About {
       period: '2018 — Present',
       note: 'Joined CareerBuilder Employment Screening; acquired by Accurate Background in 2020.',
       summary:
-        'First role after changing careers, working in the VB.NET monolith that carried ordering, vendor, and internal operations for the whole platform. Moved to the applicant tracking system integrations team at the end of 2019 and owned the APIs carrying screening requests and results through 2025. Then to the innovation team for a series of proofs of concept in Java and Spring Boot, and now to post-hire monitoring — building its API and, more recently, its Angular interface.',
+        'First role after changing careers, working in the VB.NET monolith that carried ordering, vendor, and internal operations for the whole platform. Moved to the applicant tracking system integrations team at the end of 2019 and owned the APIs carrying screening requests and results through 2025. Then to the innovation team for a series of proofs of concept in Java and Spring Boot, including LLM work on AWS Bedrock, and now to post-hire monitoring — building its API and, more recently, its Angular interface.',
     },
     {
       company: 'Chicago Title Insurance Company',
