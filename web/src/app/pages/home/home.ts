@@ -16,10 +16,11 @@ import { ProjectCard } from '../../shared/project-card';
       </h1>
 
       <p class="text-muted mt-6 max-w-2xl text-lg leading-relaxed">
-        Nearly a decade connecting employers' hiring systems to a regulated screening platform — a
-        dozen applicant tracking systems that agree on almost nothing, turned into one dependable
-        flow of requests in and results out. Lately: Java and Spring Boot, Angular on the front end,
-        and AWS infrastructure I provision myself.
+        Eight years building the systems behind background screening — five of them on the
+        integrations connecting employers' hiring platforms to a regulated screening pipeline,
+        turning applicant tracking systems that agree on almost nothing into one dependable flow of
+        requests in and results out. Lately: Java and Spring Boot, Angular on the front end, and AWS
+        infrastructure I provision myself.
       </p>
 
       <div class="mt-10 flex flex-wrap gap-4">

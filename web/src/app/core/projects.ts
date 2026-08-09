@@ -24,15 +24,15 @@ const PROJECTS: readonly Project[] = [
     title: 'Applicant Tracking System Integrations',
     tagline:
       'Background check requests in, results out — across a dozen ATS platforms that agree on almost nothing.',
-    year: 2023,
-    period: '2017 — 2023',
-    stack: ['C#', 'ASP.NET Core', 'SQL Server', 'REST', 'SOAP/XML', 'Message Queues'],
+    year: 2025,
+    period: '2019 — 2025',
+    stack: ['C#', 'ASP.NET Core', 'VB.NET', 'SQL Server', 'REST', 'SOAP/XML', 'Message Queues'],
     problem:
       'Employers live inside their applicant tracking system, so ordering a background check should not mean leaving it. The difficulty is that every ATS exposes a different contract: mostly REST, but Workday speaks SOAP/XML, and older partners still exchanged flat files over SFTP. Each brings its own authentication scheme, and its own opinion about whether it pushes work to us or waits for us to pull. Left unchecked, every new partner becomes another bespoke codebase, and every new customer becomes a deployment.',
     approach:
-      "I co-designed and extended the inbound and outbound APIs that carry requests and results between partners and our screening platform, normalizing each partner's contract at the edge into one internal representation so the differences stayed at the boundary. Push-based partners are acknowledged immediately and queued for asynchronous processing, so a slow downstream never turns into a partner-side timeout. Partial failure was the genuinely hard part: a request that half-succeeds is worse than one that fails cleanly, and getting retries and recovery right mattered more than the happy path ever did. Customer onboarding moved into configuration pages in the platform, which made a new customer integration a matter of configuration rather than a code change.",
+      "I co-designed and extended the inbound and outbound APIs that carry requests and results between partners and our screening platform, normalizing each partner's contract at the edge into one internal representation so the differences stayed at the boundary. Push-based partners are acknowledged immediately and queued for asynchronous processing, so a slow downstream never turns into a partner-side timeout. Partial failure was the genuinely hard part: a request that half-succeeds is worse than one that fails cleanly, and getting retries and recovery right mattered more than the happy path ever did. Customer onboarding moved into configuration pages in the platform, which made a new customer integration a matter of configuration rather than a code change. None of it happened on a clean slate: the integrations stayed tightly coupled to the VB.NET monolith that predated them, so alongside the new work was the slower job of carving services out of it and migrating them where the coupling allowed.",
     outcome:
-      'Built new integrations for Ceridian Dayforce and Neogov; co-designed and extended integrations across iCIMS, Workday, SmartRecruiters, Oracle, and Greenhouse; and maintained UKG, Jobvite, and Bullhorn. Six years of production ownership on the path that carries regulated, PII-heavy data between two systems that each assume they are in charge.',
+      'Built new integrations for Ceridian Dayforce and Neogov; co-designed and extended integrations across iCIMS, Workday, SmartRecruiters, Oracle, and Greenhouse; and maintained UKG, Jobvite, and Bullhorn. Five years of production ownership on the path that carries regulated, PII-heavy data between two systems that each assume they are in charge.',
     featured: true,
   },
   {
@@ -41,7 +41,7 @@ const PROJECTS: readonly Project[] = [
     tagline:
       "Continuous monitoring of driver's licenses, professional licensure, and sanctions after the hire.",
     year: 2026,
-    period: '2025 — Present',
+    period: '2026 — Present',
     stack: ['Java', 'Spring Boot', 'Angular', 'TypeScript', 'REST'],
     problem:
       "A background check is a snapshot taken on the day someone is hired, but risk does not hold still. A commercial driver's license gets suspended, a nursing license lapses, a name appears on a sanctions list. Employers who need to know about those changes were left choosing between re-running checks on a schedule — expensive, and still blind between runs — or not knowing at all.",
@@ -55,8 +55,8 @@ const PROJECTS: readonly Project[] = [
     slug: 'resume-discrepancy-detection',
     title: 'Résumé Discrepancy Detection',
     tagline: "An LLM surfacing gaps between a candidate's résumé and what they entered themselves.",
-    year: 2024,
-    period: '2024',
+    year: 2025,
+    period: '2025',
     stack: ['Java', 'Spring Boot', 'AWS Bedrock', 'JSON'],
     problem:
       'Candidates enter their employment and education history into the platform, and separately upload a résumé. When those two accounts disagree, it is worth a second look — but nothing compared them, and comparing them by hand does not scale to the volume a screening company handles.',
@@ -71,7 +71,7 @@ const PROJECTS: readonly Project[] = [
     title: 'This Site, and Its Infrastructure',
     tagline: 'Angular prerendered to static HTML, on AWS I provisioned and deploy myself.',
     year: 2026,
-    period: '2026',
+    period: '2026 — Present',
     stack: ['Angular', 'Terraform', 'AWS', 'CloudFront', 'Lambda', 'GitHub Actions'],
     problem:
       'For most of my career a DevOps team owned deployment. I could describe what happened after a merge, but I had never built it. That is a real gap, and reading about IAM is not the same as being denied by it.',
@@ -86,8 +86,8 @@ const PROJECTS: readonly Project[] = [
     slug: 'smart-jurisdiction',
     title: 'Smart Jurisdiction',
     tagline: 'A feasibility study that ended in a recommendation not to build it.',
-    year: 2024,
-    period: '2024',
+    year: 2025,
+    period: '2025',
     stack: ['Java', 'Spring Boot', 'Research'],
     problem:
       'The premise was appealing: could background checks come back in seconds rather than the usual turnaround? Instant results are an obvious differentiator in screening, and the innovation team was asked whether a faster path through the existing flow was achievable.',
