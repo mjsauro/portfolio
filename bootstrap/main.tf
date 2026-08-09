@@ -185,6 +185,9 @@ data "aws_iam_policy_document" "github_actions" {
       "apigateway:*",
       "ses:*",
       "logs:*",
+      # Certificates for the custom domain. apigateway:* already covers the v2
+      # custom domain names that consume them.
+      "acm:*",
       "iam:GetRole",
       "iam:PassRole",
       "iam:CreateRole",
