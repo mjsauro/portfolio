@@ -10,25 +10,30 @@ AWS behind CloudFront, with a serverless contact form.
 ## Architecture
 
 ```
-                     ┌──────────────────────────────┐
-   git push main ───►│ GitHub Actions               │
-                     │  OIDC ──► AWS (no keys)      │
-                     │  terraform apply             │
-                     │  s3 sync + invalidation      │
-                     └──────────────┬───────────────┘
-                                    │
-                    ┌───────────────▼───────────────┐
-   browser ────────►│ CloudFront                    │
-                    ├───────────────────────────────┤
-                    │ default  ──► S3 (private, OAC)│  prerendered HTML
-                    │ /api/*   ──► API Gateway      │
-                    └───────────────┬───────────────┘
-                                    │
-                            Lambda ──► SES ──► inbox
+   deploy    git push main ──► GitHub Actions ──► OIDC ──► AWS (no keys)
+             terraform apply · s3 sync · invalidate
+
+   request   browser ──► Cloudflare DNS   (unproxied CNAMEs)
+                                │
+              ┌─────────────────┴─────────────────┐
+         mattsauro.com                  guitarstore.mattsauro.com
+              ▼                                   ▼
+   ┌──────────────────────────┐        ┌───────────────────────┐
+   │ CloudFront               │        │ API Gateway           │
+   │   ACM cert · us-east-1   │        │   ACM cert · us-east-2│
+   ├──────────────────────────┤        ├───────────────────────┤
+   │ default  ──► S3 (OAC)    │        │ ──► GuitarStore       │
+   │ /api/*   ──► API Gateway │        │     Lambda (.NET 10)  │
+   └────────────┬─────────────┘        └───────────────────────┘
+                │
+        Lambda ──► SES ──► inbox
 ```
 
-Both origins sit behind one distribution, so the site and its API share an
-origin — no CORS, and the frontend posts to a relative `/api/contact`.
+Both portfolio origins sit behind one distribution, so the site and its API
+share an origin — no CORS, and the frontend posts to a relative `/api/contact`.
+
+The DNS records are unproxied, so CloudFront and API Gateway terminate TLS with
+their own ACM certificates rather than Cloudflare's.
 
 ## Layout
 
