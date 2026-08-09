@@ -25,7 +25,7 @@ resource "aws_cloudfront_origin_access_control" "site" {
 resource "aws_cloudfront_function" "rewrite_index" {
   name    = "${var.project_name}-rewrite-index"
   runtime = "cloudfront-js-2.0"
-  comment = "Maps clean URLs onto prerendered index.html files"
+  comment = "Redirects www to the apex, then maps clean URLs onto prerendered index.html files"
   publish = true
   code    = file("${path.module}/functions/rewrite-index.js")
 }
