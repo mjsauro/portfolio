@@ -3,7 +3,9 @@
 Personal portfolio site — an Angular SPA prerendered to static HTML, hosted on
 AWS behind CloudFront, with a serverless contact form.
 
-**Stack:** Angular 21 · Tailwind CSS v4 · Terraform · S3 · CloudFront · API Gateway · Lambda · SES · GitHub Actions (OIDC)
+**Live at [mattsauro.com](https://mattsauro.com).**
+
+**Stack:** Angular 21 · Tailwind CSS v4 · Terraform · S3 · CloudFront · API Gateway · Lambda · SES · ACM · Cloudflare DNS · GitHub Actions (OIDC)
 
 ## Architecture
 
@@ -36,6 +38,8 @@ origin — no CORS, and the frontend posts to a relative `/api/contact`.
 | `api/contact` | Lambda handler: validates the form, sends via SES            |
 | `bootstrap/`  | Terraform (local state) — state bucket + GitHub OIDC role    |
 | `infra/`      | Terraform (S3 state) — S3, CloudFront, API Gateway, Lambda   |
+| `infra/dns.tf`        | Certificate and DNS for the domain                  |
+| `infra/guitarstore.tf`| Second project on the same domain, see below        |
 
 ## Local development
 
@@ -107,6 +111,19 @@ to verified addresses. That's fine here, since the only recipient is you.
 | Secret   | `CONTACT_TO_ADDRESS`       | where messages land                   |
 | Secret   | `CONTACT_FROM_ADDRESS`     | verified SES sender                   |
 
+Plus these once a domain is attached — see [Custom domain](#custom-domain):
+
+| Type     | Name                       | Value                                 |
+| -------- | -------------------------- | ------------------------------------- |
+| Variable | `DOMAIN_NAME`              | apex domain                           |
+| Variable | `CLOUDFLARE_ZONE_ID`       | from the Cloudflare zone overview     |
+| Variable | `GUITARSTORE_SUBDOMAIN`    | `guitarstore`, or empty to disable    |
+| Secret   | `CLOUDFLARE_API_TOKEN`     | scoped to `Zone.DNS:Edit` on the zone |
+
+**Every one of these must be set.** The workflow applies the same configuration
+your laptop does, so a variable that is set locally but missing here makes CI
+apply with an empty value — and Terraform reads that as "destroy the DNS."
+
 Pushing to `main` then builds, applies, uploads, and invalidates. The site URL is
 in the workflow summary, or via `terraform -chdir=infra output site_url`.
 
@@ -116,6 +133,10 @@ Roughly **$1–3/month** at portfolio traffic levels: S3 storage and requests,
 CloudFront transfer (1 TB/month is free tier), a handful of Lambda invocations,
 and SES at $0.10 per 1,000 emails. No NAT gateway, no always-on compute.
 
+The domain adds **$10.46/year** at Cloudflare's at-cost registrar pricing. ACM
+certificates are free and renew automatically, and Cloudflare DNS is free on the
+plan this uses — so the domain is the entire additional cost.
+
 ## Adding a project
 
 Append an entry to `PROJECTS` in `web/src/app/core/projects.ts`. The next build
@@ -123,12 +144,59 @@ prerenders `/projects/<slug>` automatically — no route registration needed.
 
 ## Custom domain
 
-The site currently uses the default `*.cloudfront.net` URL. To attach a real
-domain: request an ACM certificate **in us-east-1** (CloudFront only reads certs
-from that region), add `aliases` and swap `cloudfront_default_certificate` for
-`acm_certificate_arn` in `infra/cloudfront.tf`, and point a Route53 alias record
-at the distribution.
+The site serves from `mattsauro.com`, with `www` on the same distribution. Set
+`domain_name` to enable it; leave it empty and everything falls back to the
+`*.cloudfront.net` URL.
 
-Note that `mjsauro.github.io` cannot be pointed here — GitHub controls that DNS
-zone, so neither a CNAME nor an ACM validation record is possible. The only
-option there is a client-side redirect from the Pages repo.
+DNS lives at **Cloudflare**, not Route53. The domain is registered with
+Cloudflare Registrar, which requires its own nameservers and offers no
+custom-nameserver option — so delegating to a Route53 hosted zone is not
+possible for a domain registered there. `infra/dns.tf` manages the records with
+the Cloudflare provider, which keeps the whole stack in Terraform.
+
+Two things follow from that, both simplifications over the Route53 route:
+
+- **It applies in one pass.** Cloudflare is already authoritative, so the ACM
+  validation record resolves the moment it exists and the certificate issues
+  immediately. Route53 would need the registrar delegated first, and nothing
+  resolves until it is.
+- **The apex is a CNAME.** Cloudflare flattens CNAMEs at the zone apex, so
+  there's no need for the A-record ALIAS that Route53 requires.
+
+The certificate is a wildcard in **us-east-1** — CloudFront reads certificates
+from that region only, whatever `aws_region` says, which is why `versions.tf`
+declares a second aliased provider.
+
+Authentication is by `CLOUDFLARE_API_TOKEN` in the environment, deliberately not
+a Terraform variable, so the token stays out of state and out of tfvars:
+
+```bash
+export CLOUDFLARE_API_TOKEN=...   # scoped to Zone.DNS:Edit on the zone
+terraform -chdir=infra apply
+```
+
+### A second project on the same domain
+
+`infra/guitarstore.tf` puts [GuitarStore](https://github.com/mjsauro/GuitarStore)
+on `guitarstore.mattsauro.com`. It lives here because this stack owns the domain
+— the Cloudflare zone and every record on it are managed here — while GuitarStore
+itself has no Terraform, so its HTTP API is looked up by name rather than
+managed.
+
+It uses an **API Gateway regional custom domain** rather than CloudFront.
+GuitarStore is a fully dynamic ASP.NET app behind Cognito; fronting it with
+CloudFront would mean disabling the cache and forwarding every header and cookie
+on nearly every path — all of the moving parts, none of the benefit, and a
+plausible way to break sessions.
+
+That costs a second certificate: regional API Gateway domains read certificates
+from their own region, so the us-east-1 wildcard cannot be reused. It is issued
+in `aws_region` for the exact subdomain, and deliberately *not* as a wildcard —
+a second `*.<domain>` certificate in the same account validates through the same
+CNAME name as the existing one, and Cloudflare rejects duplicate records.
+
+### GitHub Pages
+
+`mjsauro.github.io` cannot be pointed here — GitHub controls that DNS zone, so
+neither a CNAME nor an ACM validation record is possible. The only option there
+is a client-side redirect from the Pages repo.
