@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router';
           </li>
           <li>
             <a
-              href="https://www.linkedin.com/in/mattsauro/"
+              href="https://www.linkedin.com/in/matthew-sauro/"
               class="hover:text-ink transition-colors"
             >
               LinkedIn
