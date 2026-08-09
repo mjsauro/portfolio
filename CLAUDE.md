@@ -21,6 +21,24 @@ Inside `infra/`, the domain is split out: `dns.tf` owns the certificate and the
 Cloudflare records for the site, and `guitarstore.tf` puts a second, unrelated
 project on a subdomain of the same zone. Both are documented in file headers.
 
+## Where this repo lives
+
+The canonical checkout is `~/Documents/repos/portfolio`. `~/portfolio` is a
+symlink to it — not a second copy. If you are working somewhere else, stop and
+confirm before changing anything.
+
+**Check for staleness before touching `infra/`:**
+
+```bash
+git status -sb   # ## main...origin/main [behind N] means pull first
+```
+
+Ahead/behind is measured against the *local* `origin/main` ref, so a checkout
+that has not fetched reports "up to date" while being commits behind. That is not
+cosmetic here: `terraform plan` reads live state through whatever config is on
+disk, so stale config makes real resources look like unmanaged orphans slated for
+destruction. That exact misreading has already happened once.
+
 ## Commands
 
 All web commands run from `web/`:
