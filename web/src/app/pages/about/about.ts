@@ -36,10 +36,23 @@ interface Role {
           Seven of the years since have been .NET — a VB.NET monolith at first, then C# and ASP.NET
           Core once I moved to the integrations team. Since 2025 it has been Java and Spring Boot in
           a different part of the company, which was a genuine adjustment and a useful one. Along
-          the way I have picked Angular back up after years away from the front end, and started
-          closing my longest-standing gap: for most of my career a DevOps team owned deployment, so
-          this site runs on AWS infrastructure I wrote and deploy myself.
+          the way I have picked Angular back up after years away from the front end, and closed my
+          longest-standing gap: for most of my career a DevOps team owned deployment, so I built
+          this site on AWS infrastructure I wrote and deploy myself. That turned out to be timely
+          rather than academic — my team has since moved toward owning its own deployments, and I am
+          writing Terraform at work now instead of only after hours.
         </p>
+      </div>
+
+      <div class="mt-8">
+        <!-- Served from web/public/, which is synced to the bucket root. -->
+        <a
+          href="/resume.pdf"
+          download
+          class="border-line text-ink hover:border-accent rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors"
+        >
+          Download résumé (PDF)
+        </a>
       </div>
     </section>
 

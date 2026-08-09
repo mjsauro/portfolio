@@ -274,8 +274,7 @@ rather than splitting it. Screen height is the fast way to see the margin: at a
 720px body width, the content box is 960px tall, and anything above ~930px is
 likely to spill in print.
 
-Three placeholders are still highlighted in the document — city/state, the
-paralegal certificate's institution, and whether the Northeastern degree is a B.S.
-or B.A. **The About page's download button stays removed until those are filled**,
-since `web/public/` is synced to S3 and anything in it is publicly downloadable on
-the next deploy.
+The About page links it at `/resume.pdf` — `web/public/` is synced to the bucket
+root, so anything added there is publicly downloadable on the next deploy whether
+or not something links to it. Keep that in mind before putting a draft in the
+directory.
