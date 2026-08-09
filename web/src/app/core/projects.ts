@@ -57,7 +57,7 @@ const PROJECTS: readonly Project[] = [
     tagline: "An LLM surfacing gaps between a candidate's résumé and what they entered themselves.",
     year: 2025,
     period: '2025',
-    stack: ['Java', 'Spring Boot', 'AWS Bedrock', 'MongoDB', 'JSON'],
+    stack: ['Java', 'Spring Boot', 'LLM', 'AWS Bedrock', 'MongoDB', 'JSON'],
     problem:
       'Candidates enter their employment and education history into the platform, and separately upload a résumé. When those two accounts disagree, it is worth a second look — but nothing compared them, and comparing them by hand does not scale to the volume a screening company handles.',
     approach:
