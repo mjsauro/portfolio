@@ -3,6 +3,11 @@ output "site_url" {
   value       = local.domain_enabled ? "https://${var.domain_name}" : "https://${aws_cloudfront_distribution.site.domain_name}"
 }
 
+output "guitarstore_url" {
+  description = "Public URL of the GuitarStore app, empty when the subdomain is disabled."
+  value       = local.guitarstore_enabled ? "https://${local.guitarstore_fqdn}" : ""
+}
+
 output "site_bucket" {
   description = "Bucket the deploy workflow syncs into. Set as S3_BUCKET in GitHub."
   value       = aws_s3_bucket.site.id

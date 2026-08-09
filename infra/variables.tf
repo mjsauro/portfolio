@@ -22,6 +22,18 @@ variable "cloudflare_zone_id" {
   default     = ""
 }
 
+variable "guitarstore_subdomain" {
+  description = "Subdomain serving the GuitarStore app, e.g. \"guitarstore\". Empty disables it entirely. Requires domain_name to be set."
+  type        = string
+  default     = ""
+}
+
+variable "guitarstore_api_name" {
+  description = "Name of the HTTP API created by GuitarStore's deploy script. Looked up rather than hardcoded so a recreated API is picked up."
+  type        = string
+  default     = "guitarstore-api"
+}
+
 variable "contact_to_address" {
   description = "Address that receives contact form submissions. Must be SES-verified while the account is in sandbox mode."
   type        = string
