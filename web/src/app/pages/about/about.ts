@@ -111,11 +111,22 @@ export class About {
     { label: 'Languages', items: ['C#', 'Java', 'TypeScript', 'SQL'] },
     {
       label: 'Backend',
-      items: ['ASP.NET Core', 'Spring Boot', 'Microservices', 'REST', 'GraphQL', 'SOAP/XML'],
+      items: [
+        '.NET',
+        'ASP.NET Core',
+        'Spring Boot',
+        'Microservices',
+        'REST',
+        'GraphQL',
+        'SOAP/XML',
+      ],
     },
-    { label: 'Data', items: ['SQL Server', 'MongoDB', 'Entity Framework Core', 'Queues'] },
+    { label: 'Data', items: ['SQL Server', 'MongoDB', 'Entity Framework Core', 'Message queues'] },
     { label: 'Frontend', items: ['Angular', 'React', 'Tailwind CSS'] },
-    { label: 'Cloud', items: ['AWS', 'Bedrock', 'Terraform', 'GitHub Actions'] },
+    {
+      label: 'Cloud',
+      items: ['AWS', 'Bedrock', 'Terraform', 'CloudFront', 'Lambda', 'GitHub Actions'],
+    },
   ];
 
   protected readonly roles: Role[] = [

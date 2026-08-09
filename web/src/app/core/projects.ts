@@ -26,7 +26,7 @@ const PROJECTS: readonly Project[] = [
       'Background check requests in, results out — across a dozen ATS platforms that agree on almost nothing.',
     year: 2025,
     period: '2019 — 2025',
-    stack: ['C#', 'ASP.NET Core', 'VB.NET', 'SQL Server', 'REST', 'SOAP/XML', 'Message Queues'],
+    stack: ['C#', 'ASP.NET Core', 'SQL Server', 'REST', 'SOAP/XML', 'Message Queues'],
     problem:
       'Employers live inside their applicant tracking system, so ordering a background check should not mean leaving it. The difficulty is that every ATS exposes a different contract: mostly REST, but Workday speaks SOAP/XML, and older partners still exchange flat files over SFTP. Each brings its own authentication scheme, and its own opinion about whether it pushes work to us or waits for us to pull. Left unchecked, every new partner becomes another bespoke codebase, and every new customer becomes a deployment.',
     approach:
@@ -83,9 +83,9 @@ const PROJECTS: readonly Project[] = [
     featured: true,
   },
   {
-    slug: 'smart-jurisdiction',
-    title: 'Smart Jurisdiction',
-    tagline: 'A feasibility study that ended in a recommendation not to build it.',
+    slug: 'fast-path-not-built',
+    title: "The Fast Path We Didn't Build",
+    tagline: 'A feasibility study on near-instant screening results, and the case against them.',
     year: 2025,
     period: '2025',
     stack: ['Java', 'Spring Boot', 'GraphQL', 'Research'],
@@ -94,7 +94,7 @@ const PROJECTS: readonly Project[] = [
     approach:
       'Rather than start building the fast path, we started by measuring where the time actually went — which jurisdictions and which stages accounted for the delay, and which of those a short circuit could realistically remove. Alongside the measurement we put up a rough proof of concept: a GraphQL layer that resolved a query by reaching out to whichever internal subsystems it actually needed, so the shape of the request drove the work rather than a call sequence fixed before we knew what a fast path would have to touch.',
     outcome:
-      'The premise did not survive the data. Most checks already returned quickly, and the time that remained sat in places a faster pipeline could not eliminate. Building it would have added a parallel path to maintain in exchange for very little a customer would notice, so we recommended against it. I include this deliberately: choosing not to build something, and being able to show why, is as much of the job as shipping.',
+      'The premise did not survive the measurement. The delay was concentrated in stages a short circuit could not remove, so a fast path would have meant a second pipeline to maintain in exchange for very little a customer would notice. We recommended against it. I include this deliberately: choosing not to build something, and being able to show why, is as much of the job as shipping.',
     featured: false,
   },
 ];
