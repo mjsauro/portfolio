@@ -10,7 +10,7 @@ import { ProjectCard } from '../../shared/project-card';
     <section class="mx-auto max-w-5xl px-6 pt-16 pb-8">
       <h1 class="text-ink text-3xl font-bold tracking-tight sm:text-4xl">Projects</h1>
       <p class="text-muted mt-4 max-w-2xl leading-relaxed">
-        Each entry covers the problem, the approach and its tradeoffs, and the measured outcome.
+        Each entry covers the problem, the approach and its tradeoffs, and the outcome.
       </p>
 
       <div class="mt-10 grid gap-5 sm:grid-cols-2">

@@ -25,20 +25,34 @@ interface Role {
         </p>
         <p>
           I did not start here. I studied criminal justice, planned on law school, earned a
-          paralegal certificate, and spent seven years in title insurance, eventually working as an
-          underwriter. Underwriting is risk assessment under regulatory constraint — reading a file
-          closely enough to know what could go wrong, and being accountable for the call. In 2016 I
-          enrolled at Coding Temple in Chicago and changed careers. I landed, more or less by
-          accident, in the one corner of software where the previous decade was domain knowledge
-          rather than a detour.
+          paralegal certificate, and spent seven years at Chicago Title, working up from coordinator
+          to national underwriter. Underwriting is risk assessment under regulatory constraint —
+          reading a file closely enough to know what could go wrong, and being accountable for the
+          call. In the fall of 2017 I left to attend Coding Temple in Chicago, and started writing
+          software professionally that February. I landed, more or less by accident, in the one
+          corner of software where the previous decade was domain knowledge rather than a detour.
         </p>
         <p>
-          Six years of that has been C# and ASP.NET Core; the last few have been Java and Spring
-          Boot after moving to a different part of the company, which was a genuine adjustment and a
-          useful one. Along the way I have picked Angular back up after years away from the front
-          end, and started closing my longest-standing gap: for most of my career a DevOps team
-          owned deployment, so this site runs on AWS infrastructure I wrote and deploy myself.
+          Seven of the years since have been .NET — a VB.NET monolith at first, then C# and ASP.NET
+          Core once I moved to the integrations team. Since 2025 it has been Java and Spring Boot in
+          a different part of the company, which was a genuine adjustment and a useful one. Along
+          the way I have picked Angular back up after years away from the front end, and closed my
+          longest-standing gap: for most of my career a DevOps team owned deployment, so I built
+          this site on AWS infrastructure I wrote and deploy myself. That turned out to be timely
+          rather than academic — my team has since moved toward owning its own deployments, and I am
+          writing Terraform at work now instead of only after hours.
         </p>
+      </div>
+
+      <div class="mt-8">
+        <!-- Served from web/public/, which is synced to the bucket root. -->
+        <a
+          href="/resume.pdf"
+          download
+          class="border-line text-ink hover:border-accent rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors"
+        >
+          Download résumé (PDF)
+        </a>
       </div>
     </section>
 
@@ -87,9 +101,11 @@ interface Role {
 export class About {
   protected readonly skills = [
     { label: 'Languages', items: ['C#', 'Java', 'TypeScript', 'SQL'] },
-    { label: 'Backend', items: ['ASP.NET Core', 'Spring Boot', 'REST', 'SOAP/XML', 'Queues'] },
+    {
+      label: 'Backend',
+      items: ['ASP.NET Core', 'Spring Boot', 'REST', 'SOAP/XML', 'Queues', 'SQL Server'],
+    },
     { label: 'Frontend', items: ['Angular', 'React', 'Tailwind CSS'] },
-    { label: 'Data', items: ['SQL Server'] },
     { label: 'Cloud', items: ['AWS', 'Bedrock', 'Terraform', 'GitHub Actions'] },
   ];
 
@@ -97,23 +113,23 @@ export class About {
     {
       company: 'Accurate Background',
       title: 'Senior Software Engineer',
-      period: '2018 — Present',
+      period: '2020 — Present',
       summary:
-        'Joined through the acquisition of CareerBuilder Employment Screening. Built and maintained the ATS integrations carrying background check requests and results, then moved to the innovation team for a series of proofs of concept in Java and Spring Boot, and now to post-hire monitoring — building its API and, more recently, its Angular interface.',
+        'Joined through the acquisition of CareerBuilder Employment Screening. Kept ownership of the ATS integrations carrying background check requests and results through 2025, then moved to the innovation team for a series of proofs of concept in Java and Spring Boot, and now to post-hire monitoring — building its API and, more recently, its Angular interface.',
     },
     {
       company: 'CareerBuilder Employment Screening',
       title: 'Software Engineer',
-      period: '2016 — 2018',
+      period: '2018 — 2020',
       summary:
-        'First role after changing careers. Built ASP.NET Core APIs and internal tooling for background screening integrations, working across REST, SOAP, and legacy file-based partner interfaces.',
+        'First role after changing careers, working in the VB.NET monolith that carried ordering, vendor, and internal operations for the whole platform. Moved to the applicant tracking system integrations team at the end of 2019 and started building the APIs that carry screening requests and results.',
     },
     {
-      company: 'Title insurance',
-      title: 'Title Underwriter',
-      period: '2009 — 2016',
+      company: 'Chicago Title Insurance Company',
+      title: 'National Underwriter',
+      period: '2010 — 2017',
       summary:
-        'Worked up to the underwriter level, assessing risk on real estate transactions under regulatory constraint. The habits it built — reading a file closely, knowing what could go wrong, owning the call — transferred more directly to regulated software than I expected.',
+        'Worked up from coordinator to national underwriter, assessing risk on commercial real estate transactions across all 50 states under regulatory constraint. The habits it built — reading a file closely, knowing what could go wrong, owning the call — transferred more directly to regulated software than I expected.',
     },
   ];
 }
