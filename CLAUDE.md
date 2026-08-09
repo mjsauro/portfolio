@@ -5,8 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 Personal portfolio site for Matthew J. Sauro. Angular SPA, prerendered to static
-files, served from S3 through CloudFront, with a serverless contact form. All
-AWS infrastructure is Terraform-managed and deployed by GitHub Actions via OIDC.
+files, served from S3 through CloudFront at **mattsauro.com**, with a serverless
+contact form. Infrastructure is Terraform-managed and deployed by GitHub Actions
+via OIDC — including DNS, which lives at Cloudflare rather than Route53 and is
+managed with the Cloudflare provider.
 
 ```
 web/        Angular 21 app (Tailwind, zoneless, prerendered)
@@ -14,6 +16,10 @@ api/contact Lambda handler for the contact form
 bootstrap/  Terraform, S3 state — creates the state bucket + GitHub OIDC role
 infra/      Terraform, S3 state — the actual stack
 ```
+
+Inside `infra/`, the domain is split out: `dns.tf` owns the certificate and the
+Cloudflare records for the site, and `guitarstore.tf` puts a second, unrelated
+project on a subdomain of the same zone. Both are documented in file headers.
 
 ## Commands
 
@@ -36,10 +42,15 @@ npx ng test --watch=false --filter "sorts projects"                 # by test na
 Terraform (see ordering below before running anything):
 
 ```bash
+export CLOUDFLARE_API_TOKEN=...          # required — see "The domain" below
 terraform -chdir=infra fmt -recursive
 terraform -chdir=infra init -backend-config=backend.hcl
 terraform -chdir=infra plan
 ```
+
+Anything touching `infra/` needs that token in the environment. Without it even a
+read-only `plan` fails while refreshing the Cloudflare records, with a `400 Missing
+X-Auth-Key` that looks like a broken config rather than a missing credential.
 
 Installed locally: Terraform 1.15.8, AWS CLI 2.36.19, AWS provider pinned to
 6.58.0 by the committed `.terraform.lock.hcl`. Terraform is **not** in
@@ -149,6 +160,59 @@ renamed or transferred, refresh the IDs
 re-apply. Never widen these into wildcards over the owner or repo segments — that
 would let an attacker-created repo with a similar name assume the role.
 
+**Local applies cannot catch a missing deploy-role permission.** Laptop runs use
+admin credentials; CI assumes the far narrower role defined in `bootstrap/`. So new
+resource types apply cleanly by hand and then fail the next CI run — which is
+exactly how the custom domain shipped, with `acm:DescribeCertificate` denied at
+plan time on the first deploy after merge. When `infra/` starts managing a service
+it did not before, widen `data.aws_iam_policy_document.github_actions` in
+`bootstrap/main.tf` in the same change, and remember bootstrap has to be applied by
+hand for that to take effect.
+
+**The domain is Terraform-managed, and empty variables destroy it.** `domain_name`,
+`cloudflare_zone_id`, and `guitarstore_subdomain` all default to `""`, and every
+domain resource is gated on them via `local.domain_enabled`. That default is what
+lets a fresh account apply before a domain exists — but it also means an apply
+with them unset is not a no-op. It reads as *"the domain should not exist"* and
+destroys the certificate, the Cloudflare records, and the CloudFront aliases,
+taking the site offline while reporting success.
+
+They therefore have to be set in **two** places that Terraform cannot cross-check:
+
+| Where                             | What                                                                      |
+| --------------------------------- | ------------------------------------------------------------------------- |
+| `infra/terraform.tfvars`          | Local applies. Gitignored, so a fresh clone does not have it              |
+| GitHub Actions repo *variables*   | CI applies. `DOMAIN_NAME`, `CLOUDFLARE_ZONE_ID`, `GUITARSTORE_SUBDOMAIN`  |
+
+The token is separate and secret: `CLOUDFLARE_API_TOKEN`, from the environment
+locally and from repo *secrets* in CI. It is deliberately not a Terraform variable
+so it cannot land in state or in a tfvars file.
+
+**DNS is at Cloudflare because it has to be.** The domain is registered with
+Cloudflare Registrar, which does not offer custom nameservers, so a Route53 hosted
+zone was never an option. Two consequences worth knowing before editing `dns.tf`:
+Cloudflare flattens apex CNAMEs, so the apex points straight at CloudFront with no
+ALIAS-record special case; and every record sets `proxied = false` on purpose.
+Enabling the proxy would stack Cloudflare's CDN in front of CloudFront and serve
+Cloudflare's certificate instead of the ACM one — two CDNs deep, for no benefit.
+
+**There are two certificates, and they are not interchangeable.** `dns.tf` issues a
+wildcard in **us-east-1**, because CloudFront reads certificates from that region
+only regardless of `var.aws_region`. `guitarstore.tf` issues a second, exact-name
+certificate in `var.aws_region`, because a *regional* API Gateway domain reads from
+its own region and cannot reuse the wildcard. The second one is deliberately not a
+wildcard: two `*.<domain>` certificates in one account validate through the same
+CNAME name, and Cloudflare rejects duplicate records where Route53 tolerated them.
+
+**GuitarStore is a separate app sharing this zone.** `guitarstore.tf` lives here
+because this stack owns the Cloudflare zone, not because the app does. GuitarStore
+has no Terraform of its own — its Lambda and HTTP API come from a bash script in
+that repo — so this stack looks the API up by name (`var.guitarstore_api_name`)
+rather than managing it, and a recreated API is picked up automatically. It is
+fronted by an API Gateway custom domain rather than CloudFront because it is a
+fully dynamic ASP.NET app using Cognito; caching it would mean disabling the cache
+and forwarding nearly every header and cookie anyway.
+
 **SES starts in sandbox.** `terraform apply` creates the email identities but
 cannot verify them — AWS emails a confirmation link that must be clicked, or
 sending fails at runtime with `MessageRejected` while the apply reports success.
@@ -191,6 +255,27 @@ Ceridian Dayforce, Neogov, …) is fine — those integrations are public. Namin
 Accurate's *customers*, or describing internal architecture in specifics
 (schemas, service names, infrastructure), is not.
 
-Still outstanding: a résumé PDF. The About page's download button was removed
-rather than left pointing at a 404; restore it once `web/public/resume.pdf`
-exists.
+## The résumé
+
+`resume/resume.html` is print-first source that renders to `web/public/resume.pdf`
+via `resume/render.sh` (headless Chrome). The PDF is committed rather than built in
+CI: it changes a few times a year, and adding a browser to the deploy workflow to
+regenerate a rarely-moving static file is not worth the minutes.
+
+It must stay **one page**, and `render.sh` does not enforce that — check after
+editing:
+
+```bash
+./resume/render.sh && mdls -name kMDItemNumberOfPages web/public/resume.pdf
+```
+
+Content sits close to the limit, so Chrome will push a whole block onto page two
+rather than splitting it. Screen height is the fast way to see the margin: at a
+720px body width, the content box is 960px tall, and anything above ~930px is
+likely to spill in print.
+
+Three placeholders are still highlighted in the document — city/state, the
+paralegal certificate's institution, and whether the Northeastern degree is a B.S.
+or B.A. **The About page's download button stays removed until those are filled**,
+since `web/public/` is synced to S3 and anything in it is publicly downloadable on
+the next deploy.
