@@ -72,6 +72,12 @@ jobs:
           TF_VAR_aws_region: ${{ vars.AWS_REGION }}
           TF_VAR_contact_to_address: ${{ secrets.CONTACT_TO_ADDRESS }}
           TF_VAR_contact_from_address: ${{ secrets.CONTACT_FROM_ADDRESS }}
+          # Must mirror whatever the domain was applied with locally. If these
+          # are unset while the records exist in state, this apply deletes them.
+          TF_VAR_domain_name: ${{ vars.DOMAIN_NAME }}
+          TF_VAR_cloudflare_zone_id: ${{ vars.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_guitarstore_subdomain: ${{ vars.GUITARSTORE_SUBDOMAIN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: terraform apply -auto-approve -input=false
 
       - name: Read Terraform outputs

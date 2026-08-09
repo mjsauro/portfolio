@@ -1,6 +1,11 @@
 output "site_url" {
   description = "Public URL of the portfolio."
-  value       = "https://${aws_cloudfront_distribution.site.domain_name}"
+  value       = local.domain_enabled ? "https://${var.domain_name}" : "https://${aws_cloudfront_distribution.site.domain_name}"
+}
+
+output "guitarstore_url" {
+  description = "Public URL of the GuitarStore app, empty when the subdomain is disabled."
+  value       = local.guitarstore_enabled ? "https://${local.guitarstore_fqdn}" : ""
 }
 
 output "site_bucket" {

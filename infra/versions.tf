@@ -10,6 +10,10 @@ terraform {
       source  = "hashicorp/archive"
       version = "~> 2.4"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 5.0"
+    }
   }
 
   /*
@@ -34,5 +38,28 @@ provider "aws" {
     }
   }
 }
+
+/*
+ * CloudFront reads ACM certificates from us-east-1 only, whatever var.aws_region
+ * says. Used solely by the certificate in dns.tf.
+ */
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+
+  default_tags {
+    tags = {
+      Project   = var.project_name
+      ManagedBy = "terraform/infra"
+    }
+  }
+}
+
+/*
+ * Authenticates from CLOUDFLARE_API_TOKEN in the environment. Deliberately not a
+ * Terraform variable: variables land in state and in tfvars files, and this token
+ * can edit DNS for the domain.
+ */
+provider "cloudflare" {}
 
 data "aws_caller_identity" "current" {}
