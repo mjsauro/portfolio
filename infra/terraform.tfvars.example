@@ -11,3 +11,16 @@ contact_to_address = "mjsauro@gmail.com"
 # sandbox setup — one identity to verify. Switch to something like
 # noreply@yourdomain.com once you own a domain and verify it in SES.
 contact_from_address = "mjsauro@gmail.com"
+
+# Custom domain. Leave domain_name empty to stay on the *.cloudfront.net URL.
+#
+# DNS lives at Cloudflare (see the header comment in dns.tf) and is managed by
+# the cloudflare provider, which authenticates from CLOUDFLARE_API_TOKEN in the
+# environment — never put that token in this file.
+#
+#   export CLOUDFLARE_API_TOKEN=...
+#
+# Whatever is set here must also be set as the DOMAIN_NAME and CLOUDFLARE_ZONE_ID
+# GitHub Actions repo variables, or the next CI deploy tears the DNS records out.
+domain_name        = ""
+cloudflare_zone_id = ""

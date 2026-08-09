@@ -99,6 +99,9 @@ resource "aws_cloudfront_distribution" "site" {
   is_ipv6_enabled     = true
   comment             = "${var.project_name} portfolio"
   default_root_object = "index.html"
+
+  # Empty unless a custom domain is configured — see dns.tf.
+  aliases = local.site_aliases
   # North America + Europe only. Widen if you start getting traffic elsewhere.
   price_class = "PriceClass_100"
 
@@ -177,18 +180,26 @@ resource "aws_cloudfront_distribution" "site" {
     }
   }
 
-  viewer_certificate {
-    /*
-     * Serves *.cloudfront.net over HTTPS at no cost. To add a custom domain,
-     * set `aliases` and swap this for `acm_certificate_arn`.
-     *
-     * The certificate MUST live in us-east-1 — CloudFront reads certs from
-     * that region only, regardless of var.aws_region (us-east-2 here). That
-     * means a second aliased provider:
-     *
-     *   provider "aws" { alias = "us_east_1", region = "us-east-1" }
-     *   resource "aws_acm_certificate" "site" { provider = aws.us_east_1, ... }
-     */
-    cloudfront_default_certificate = true
+  /*
+   * Exactly one of these renders. Without a custom domain the distribution keeps
+   * its free *.cloudfront.net certificate; with one it serves the ACM wildcard
+   * from us-east-1.
+   */
+  dynamic "viewer_certificate" {
+    for_each = local.domain_enabled ? [] : [1]
+
+    content {
+      cloudfront_default_certificate = true
+    }
+  }
+
+  dynamic "viewer_certificate" {
+    for_each = local.domain_enabled ? [1] : []
+
+    content {
+      acm_certificate_arn      = aws_acm_certificate_validation.site[0].certificate_arn
+      ssl_support_method       = "sni-only"
+      minimum_protocol_version = "TLSv1.2_2021"
+    }
   }
 }

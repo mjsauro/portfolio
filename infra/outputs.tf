@@ -1,6 +1,6 @@
 output "site_url" {
   description = "Public URL of the portfolio."
-  value       = "https://${aws_cloudfront_distribution.site.domain_name}"
+  value       = local.domain_enabled ? "https://${var.domain_name}" : "https://${aws_cloudfront_distribution.site.domain_name}"
 }
 
 output "site_bucket" {
