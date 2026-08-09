@@ -101,9 +101,11 @@ interface Role {
 export class About {
   protected readonly skills = [
     { label: 'Languages', items: ['C#', 'Java', 'TypeScript', 'SQL'] },
-    { label: 'Backend', items: ['ASP.NET Core', 'Spring Boot', 'REST', 'SOAP/XML', 'Queues'] },
+    {
+      label: 'Backend',
+      items: ['ASP.NET Core', 'Spring Boot', 'REST', 'SOAP/XML', 'Queues', 'SQL Server'],
+    },
     { label: 'Frontend', items: ['Angular', 'React', 'Tailwind CSS'] },
-    { label: 'Data', items: ['SQL Server'] },
     { label: 'Cloud', items: ['AWS', 'Bedrock', 'Terraform', 'GitHub Actions'] },
   ];
 
