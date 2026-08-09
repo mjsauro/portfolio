@@ -1,8 +1,14 @@
 name: Deploy
 
+# Docs-only pushes skip the deploy: a full apply, sync and invalidation for a
+# README edit is wasted. A push mixing Markdown with anything else still runs.
+# workflow_dispatch remains the manual escape hatch.
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - LICENSE
   workflow_dispatch:
 
 # id-token lets the job mint an OIDC token and trade it for AWS credentials.
