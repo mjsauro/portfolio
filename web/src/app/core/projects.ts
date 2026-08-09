@@ -83,9 +83,9 @@ const PROJECTS: readonly Project[] = [
     featured: true,
   },
   {
-    slug: 'smart-jurisdiction',
-    title: 'Smart Jurisdiction',
-    tagline: 'A feasibility study that ended in a recommendation not to build it.',
+    slug: 'fast-path-not-built',
+    title: "The Fast Path We Didn't Build",
+    tagline: 'A feasibility study on near-instant screening results, and the case against them.',
     year: 2025,
     period: '2025',
     stack: ['Java', 'Spring Boot', 'GraphQL', 'Research'],
