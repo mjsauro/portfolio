@@ -61,9 +61,9 @@ const PROJECTS: readonly Project[] = [
     problem:
       'Candidates enter their employment and education history into the platform, and separately upload a résumé. When those two accounts disagree, it is worth a second look — but nothing compared them, and comparing them by hand does not scale to the volume a screening company handles.',
     approach:
-      'A Spring Boot service sends the résumé to AWS Bedrock, which extracts positions, employers, dates, and education into structured JSON. Rules then compare that against what the candidate entered, deciding what counts as a real discrepancy rather than formatting noise — a job listed as "2019-2021" versus "March 2019 to June 2021" is not a lie. The framing was deliberate: in a regulated screening context a false accusation is a serious harm to a real person, so the output surfaces a discrepancy for a human to review and never renders a verdict. It ran against test data only.',
+      'A Spring Boot service sends the résumé to AWS Bedrock, which extracts positions, employers, dates, and education into structured JSON. Rules then compare that against what the candidate entered, deciding what counts as a real discrepancy rather than formatting noise — a job listed as "2019-2021" versus "March 2019 to June 2021" is not a lie. The framing was deliberate: in a regulated screening context a false accusation is a serious harm to a real person, so the output surfaces a discrepancy for a human to review and never renders a verdict.',
     outcome:
-      'Delivered as a proof of concept on the innovation team. It established that the approach was viable and was handed to the team owning that product area, who took it to production.',
+      'Delivered as a proof of concept on the innovation team, running against test data only. It established that the approach was viable and was handed to the team owning that product area, who took it to production.',
     featured: true,
   },
   {
