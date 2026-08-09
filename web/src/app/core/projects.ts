@@ -94,7 +94,7 @@ const PROJECTS: readonly Project[] = [
     approach:
       'Rather than start building the fast path, we started by measuring where the time actually went — which jurisdictions and which stages accounted for the delay, and which of those a short circuit could realistically remove. Alongside the measurement we put up a rough proof of concept: a GraphQL layer that resolved a query by reaching out to whichever internal subsystems it actually needed, so the shape of the request drove the work rather than a call sequence fixed before we knew what a fast path would have to touch.',
     outcome:
-      'The premise did not survive the data. Most checks already returned quickly, and the time that remained sat in places a faster pipeline could not eliminate. Building it would have added a parallel path to maintain in exchange for very little a customer would notice, so we recommended against it. I include this deliberately: choosing not to build something, and being able to show why, is as much of the job as shipping.',
+      'The premise did not survive the measurement. The delay was concentrated in stages a short circuit could not remove, so a fast path would have meant a second pipeline to maintain in exchange for very little a customer would notice. We recommended against it. I include this deliberately: choosing not to build something, and being able to show why, is as much of the job as shipping.',
     featured: false,
   },
 ];
