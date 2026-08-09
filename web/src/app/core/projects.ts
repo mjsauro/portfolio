@@ -26,7 +26,7 @@ const PROJECTS: readonly Project[] = [
       'Background check requests in, results out — across a dozen ATS platforms that agree on almost nothing.',
     year: 2025,
     period: '2019 — 2025',
-    stack: ['C#', 'ASP.NET Core', 'VB.NET', 'SQL Server', 'REST', 'SOAP/XML', 'Message Queues'],
+    stack: ['C#', 'ASP.NET Core', 'SQL Server', 'REST', 'SOAP/XML', 'Message Queues'],
     problem:
       'Employers live inside their applicant tracking system, so ordering a background check should not mean leaving it. The difficulty is that every ATS exposes a different contract: mostly REST, but Workday speaks SOAP/XML, and older partners still exchange flat files over SFTP. Each brings its own authentication scheme, and its own opinion about whether it pushes work to us or waits for us to pull. Left unchecked, every new partner becomes another bespoke codebase, and every new customer becomes a deployment.',
     approach:
