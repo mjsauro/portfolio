@@ -98,15 +98,39 @@ jobs:
         working-directory: web
         run: npm run build
 
-      # Two passes, because the right cache header differs by file type.
+      # Three passes, because the right cache header differs by file type.
       # Fingerprinted assets are immutable; HTML must be revalidated or users
-      # keep getting the old page after a deploy.
+      # keep getting the old page after a deploy; the third group is neither.
+      #
+      # `--delete` honours the excludes, so a file skipped by one pass is not
+      # deleted by it either — the passes do not fight over the bucket.
       - name: Upload fingerprinted assets
         run: |
           aws s3 sync web/dist/portfolio/browser "s3://${{ steps.tf.outputs.bucket }}" \
             --delete \
             --exclude "*.html" \
+            --exclude "favicon.*" \
+            --exclude "apple-touch-icon.png" \
+            --exclude "*.pdf" \
             --cache-control "public, max-age=31536000, immutable"
+
+      # Everything in web/public/ keeps the name it was written with — the
+      # build does not fingerprint it. An immutable year-long cache on a fixed
+      # name means a replaced file never reaches anyone who already loaded the
+      # old one, and a CloudFront invalidation does not help: it clears edge
+      # caches, not browser caches. That applies to the icons and to the
+      # résumé, which is exactly the sort of file that gets quietly replaced.
+      #
+      # Add new entries here when adding anything to web/public/.
+      - name: Upload fixed-name assets
+        run: |
+          aws s3 sync web/dist/portfolio/browser "s3://${{ steps.tf.outputs.bucket }}" \
+            --delete \
+            --exclude "*" \
+            --include "favicon.*" \
+            --include "apple-touch-icon.png" \
+            --include "*.pdf" \
+            --cache-control "public, max-age=3600, must-revalidate"
 
       - name: Upload HTML
         run: |
