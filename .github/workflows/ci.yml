@@ -36,6 +36,13 @@ jobs:
       - name: Check formatting
         run: npx prettier --check "src/**/*.ts" "src/**/*.html" "src/**/*.css"
 
+      - name: Check formatting of the CloudFront function
+        # Runs here because this is the only job with Prettier installed.
+        # --config is required, not tidiness: Prettier resolves configuration
+        # per file, and infra/ sits outside web/, so without it these files are
+        # checked against Prettier's defaults and always fail.
+        run: npx prettier --config .prettierrc --check "../infra/functions/*.js"
+
       - run: npm test -- --watch=false
 
       - name: Build
@@ -57,6 +64,26 @@ jobs:
             fi
           done
           echo "Prerendered routes look good."
+
+  functions:
+    name: Test the CloudFront function
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          # No cache: line here, and no npm ci step. The tests use node:test and
+          # node:vm only, so infra/ needs neither a package.json nor a lockfile
+          # — enabling the cache would just fail looking for one.
+          node-version: 20
+
+      # terraform validate parses the .tf files but treats the function body as
+      # an opaque string, so this is the only thing standing between a typo in
+      # rewrite-index.js and a 503 on every request to the site.
+      - name: Test
+        run: node --test infra/functions/
 
   terraform:
     name: Validate Terraform

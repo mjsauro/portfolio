@@ -66,6 +66,24 @@ terraform -chdir=infra init -backend-config=backend.hcl
 terraform -chdir=infra plan
 ```
 
+The CloudFront Function has its own tests, from the repository root. They use
+Node's built-in runner, so there is nothing to install and no `package.json` in
+`infra/`:
+
+```bash
+node --test infra/functions/                        # whole suite
+node --test --test-name-pattern "query" infra/functions/
+```
+
+Prettier does cover that directory, but only when pointed at the config
+explicitly — it resolves configuration per file, and `infra/` is outside `web/`,
+so a bare `npx prettier` there silently uses defaults and reformats the file
+wrongly:
+
+```bash
+npx --prefix web prettier --config web/.prettierrc --write "infra/functions/*.js"
+```
+
 Anything touching `infra/` needs that token in the environment. Without it even a
 read-only `plan` fails while refreshing the Cloudflare records, with a `400 Missing
 X-Auth-Key` that looks like a broken config rather than a missing credential.
@@ -136,11 +154,22 @@ adds a `/projects/<slug>/index.html` at the next build; there is a test assertin
 the two stay in sync. The prerender hook cannot use DI, which is why the slug
 list is a plain export.
 
-**CloudFront rewrites clean URLs.** S3's REST endpoint — required by Origin
-Access Control — has no directory-index behavior, so `/about` would 403 rather
-than serve `/about/index.html`. `infra/functions/rewrite-index.js` runs as a
-CloudFront Function on viewer-request and appends `index.html`. It is attached
-**only** to the default behavior; attaching it to `/api/*` would corrupt API paths.
+**CloudFront rewrites clean URLs, and redirects www.** `infra/functions/rewrite-index.js`
+runs as a CloudFront Function on viewer-request and does two things, in order. First
+it 301s `www.<domain>` to the apex, because DNS cannot: a CNAME resolves a name, it
+does not redirect a request, so the hostname has to reach CloudFront before anything
+can answer. Then it appends `index.html` — S3's REST endpoint, required by Origin
+Access Control, has no directory-index behavior, so `/about` would 403 rather than
+serve `/about/index.html`.
+
+It is attached **only** to the default behavior. On `/api/*` it would rewrite
+`/api/contact` to `/api/contact/index.html`, and on the www hostname it would 301 the
+form POST — which a browser reissues as a GET with the body dropped, so the API would
+see a valid-looking request containing nothing.
+
+`terraform validate` parses the `.tf` files but treats the function body as an opaque
+string, so the only thing catching a mistake in it before it reaches every request to
+the site is `infra/functions/rewrite-index.test.js`.
 
 **The API is same-origin on purpose.** CloudFront has a second origin behind the
 `/api/*` behavior pointing at API Gateway, so the browser only ever sees one
