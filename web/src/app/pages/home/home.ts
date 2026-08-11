@@ -16,11 +16,11 @@ import { ProjectCard } from '../../shared/project-card';
       </h1>
 
       <p class="text-muted mt-6 max-w-2xl text-lg leading-relaxed">
-        Eight years building the systems behind background screening — five of them on the
-        integrations connecting employers' hiring platforms to a regulated screening pipeline,
-        turning applicant tracking systems that agree on almost nothing into one dependable flow of
-        requests in and results out. Lately: Java and Spring Boot, Angular on the front end, and AWS
-        infrastructure I provision myself.
+        Every company hires through different software, and all of it eventually has to ask the same
+        question: does this candidate check out? I've spent eight years building the systems that
+        answer it — five on the connections themselves, making a pile of incompatible platforms
+        behave like one. Lately: Java and Spring Boot, Angular on the front end, and the AWS setup
+        it all runs on.
       </p>
 
       <div class="mt-10 flex flex-wrap gap-4">
