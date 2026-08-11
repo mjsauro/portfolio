@@ -20,7 +20,18 @@ contact_from_address = "mjsauro@gmail.com"
 #
 #   export CLOUDFLARE_API_TOKEN=...
 #
-# Whatever is set here must also be set as the DOMAIN_NAME and CLOUDFLARE_ZONE_ID
-# GitHub Actions repo variables, or the next CI deploy tears the DNS records out.
-domain_name        = ""
-cloudflare_zone_id = ""
+# Whatever is set here must also be set as the DOMAIN_NAME, CLOUDFLARE_ZONE_ID,
+# and GUITARSTORE_SUBDOMAIN GitHub Actions repo variables, or the next CI deploy
+# tears the DNS records out.
+#
+# Empty is not a no-op on an existing deployment. Every domain resource is gated
+# on these three, so blanking one reads as "this should not exist" and destroys
+# it — the certificate, the Cloudflare records, and the CloudFront aliases for
+# domain_name; the certificate, API Gateway custom domain, mapping, and record
+# for guitarstore_subdomain. If you are recreating this file for a domain that
+# is already live, copy the real values in before applying.
+domain_name           = ""
+cloudflare_zone_id    = ""
+
+# Subdomain for the GuitarStore app (see guitarstore.tf). Requires domain_name.
+guitarstore_subdomain = ""
