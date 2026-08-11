@@ -83,7 +83,16 @@ interface Role {
           <li class="border-line border-l-2 pl-5">
             <p class="text-muted font-mono text-xs">{{ role.period }}</p>
             <h3 class="text-ink mt-1 font-semibold">{{ role.company }}</h3>
-            <p class="text-muted mt-1 text-sm">{{ role.titles.join(' · ') }}</p>
+            <!--
+              One title per line rather than a joined run. Each carries its own
+              date range, so inline separators wrap into the middle of a line on
+              a narrow screen and the boundary between roles disappears.
+            -->
+            <ul class="text-muted mt-1 space-y-0.5 text-sm">
+              @for (title of role.titles; track title) {
+                <li>{{ title }}</li>
+              }
+            </ul>
             @if (role.note) {
               <p class="text-muted mt-1 text-xs italic">{{ role.note }}</p>
             }
